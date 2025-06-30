@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="content">
+    <div class="row">
+        <!-- ESG Compliance Form -->
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">ESG Compliance Report Submission</h5>
+                </div>
+
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Document Title</label>
+                            <input type="text" class="form-control" placeholder="Enter document title" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Document Type</label>
+                            <select class="form-select" required>
+                                <option value="">Select type</option>
+                                <option value="GRI">GRI</option>
+                                <option value="TCFD">TCFD</option>
+                                <option value="King IV">King IV</option>
+                                <option value="Custom">Custom Report (Non-standard)</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Organization Name</label>
+                            <select class="form-select" required>
+                                <option value="">Select organization</option>
+                                <option value="GRI Standards">GRI Standards</option>
+                                <option value="Organization 2">Organization 2</option>
+                                <option value="Organization 3">Organization 3</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Reporting Year</label>
+                            <select class="form-select" required>
+                                <option value="">Select year</option>
+                                <option value="2021">2021</option>
+                                <option value="2022">2022</option>
+                                <option value="2023">2023</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Document Version</label>
+                            <input type="text" class="form-control" placeholder="Enter version number">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Report Sector</label>
+                            <select class="form-select">
+                                <option value="">Select sector</option>
+                                <option value="Energy">Energy</option>
+                                <option value="Manufacturing">Manufacturing</option>
+                                <option value="Technology">Technology</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Frameworks Used</label>
+                            <select class="form-select">
+                                <option value="GRI">GRI (Global Reporting Initiative)</option>
+                                <option value="TCFD">TCFD (Task Force on Climate-related Financial Disclosures)</option>
+                                <option value="SASB">SASB (Sustainability Accounting Standards Board)</option>
+                                <option value="King IV">King IV (South Africa)</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Geographical Region</label>
+                            <select class="form-select">
+                                <option value="">Select region</option>
+                                <option value="Africa">Africa</option>
+                                <option value="Asia">Asia</option>
+                                <option value="Europe">Europe</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Report Description</label>
+                            <textarea class="form-control" rows="3" placeholder="Brief description of the report"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Attach Report</label>
+                            <input type="file" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <p class="fw-semibold mb-1">Document Status</p>
+                            <div class="d-inline-flex align-items-center me-3">
+                                <input type="radio" name="document_status" id="status_active" checked>
+                                <label class="ms-2" for="status_active">Active</label>
+                            </div>
+                            <div class="d-inline-flex align-items-center">
+                                <input type="radio" name="document_status" id="status_inactive">
+                                <label class="ms-2" for="status_inactive">Inactive</label>
+                            </div>
+                        </div>
+
+                        <div class="card-footer d-flex justify-content-end p-0 pt-3">
+                            <button type="submit" class="btn btn-primary">
+                                Submit Report <i class="ph-paper-plane-tilt ms-2"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- /ESG Compliance Form -->
+
+        <!-- Document Preview -->
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Document Preview</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Uploaded document preview will appear here. You can review the contents before final submission.</p>
+                    <div class="border p-3">
+                        <p class="text-center text-muted mb-0">No document uploaded yet. Please attach a report to see the preview.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Document Preview -->
+    </div>
+</div>
+{% endblock %}
