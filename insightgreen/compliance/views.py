@@ -10,6 +10,13 @@ def index(request):
     """
     return render(request, 'compliance/index.html')
 
+<<<<<<< HEAD
+def graph(request):
+    """
+    Render the graph page for the compliance app.
+    """
+    return render(request, 'graph.html')
+=======
 def compliance_report_upload(request):
     if request.method == 'POST':
         form = ESGComplianceReportForm(request.POST, request.FILES)
@@ -21,3 +28,4 @@ def compliance_report_upload(request):
     else:
         form = ESGComplianceReportForm()
     return render(request, 'compliance/report_upload.html', {'form': form})
+>>>>>>> 212f352442d019ff513574271baa895a9ed423f0
