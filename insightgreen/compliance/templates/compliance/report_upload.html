@@ -5,135 +5,186 @@
 <div class="content">
     <div class="row">
         <!-- ESG Compliance Form -->
-        <div class="col-lg-4">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">ESG Compliance Report Submission</h5>
-                </div>
-
-                <div class="card-body">
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Document Title</label>
-                            <input type="text" class="form-control" placeholder="Enter document title" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Document Type</label>
-                            <select class="form-select" required>
-                                <option value="">Select type</option>
-                                <option value="GRI">GRI</option>
-                                <option value="TCFD">TCFD</option>
-                                <option value="King IV">King IV</option>
-                                <option value="Custom">Custom Report (Non-standard)</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Organization Name</label>
-                            <select class="form-select" required>
-                                <option value="">Select organization</option>
-                                <option value="GRI Standards">GRI Standards</option>
-                                <option value="Organization 2">Organization 2</option>
-                                <option value="Organization 3">Organization 3</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Reporting Year</label>
-                            <select class="form-select" required>
-                                <option value="">Select year</option>
-                                <option value="2021">2021</option>
-                                <option value="2022">2022</option>
-                                <option value="2023">2023</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Document Version</label>
-                            <input type="text" class="form-control" placeholder="Enter version number">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Report Sector</label>
-                            <select class="form-select">
-                                <option value="">Select sector</option>
-                                <option value="Energy">Energy</option>
-                                <option value="Manufacturing">Manufacturing</option>
-                                <option value="Technology">Technology</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Frameworks Used</label>
-                            <select class="form-select">
-                                <option value="GRI">GRI (Global Reporting Initiative)</option>
-                                <option value="TCFD">TCFD (Task Force on Climate-related Financial Disclosures)</option>
-                                <option value="SASB">SASB (Sustainability Accounting Standards Board)</option>
-                                <option value="King IV">King IV (South Africa)</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Geographical Region</label>
-                            <select class="form-select">
-                                <option value="">Select region</option>
-                                <option value="Africa">Africa</option>
-                                <option value="Asia">Asia</option>
-                                <option value="Europe">Europe</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Report Description</label>
-                            <textarea class="form-control" rows="3" placeholder="Brief description of the report"></textarea>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Attach Report</label>
-                            <input type="file" class="form-control" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <p class="fw-semibold mb-1">Document Status</p>
-                            <div class="d-inline-flex align-items-center me-3">
-                                <input type="radio" name="document_status" id="status_active" checked>
-                                <label class="ms-2" for="status_active">Active</label>
-                            </div>
-                            <div class="d-inline-flex align-items-center">
-                                <input type="radio" name="document_status" id="status_inactive">
-                                <label class="ms-2" for="status_inactive">Inactive</label>
-                            </div>
-                        </div>
-
-                        <div class="card-footer d-flex justify-content-end p-0 pt-3">
-                            <button type="submit" class="btn btn-primary">
-                                Submit Report <i class="ph-paper-plane-tilt ms-2"></i>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+<div class="col-lg-4">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">ESG Compliance Report Submission</h5>
         </div>
-        <!-- /ESG Compliance Form -->
 
-        <!-- Document Preview -->
-        <div class="col-lg-8">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">Document Preview</h5>
-                </div>
-                <div class="card-body">
-                    <p class="text-muted">Uploaded document preview will appear here. You can review the contents before final submission.</p>
-                    <div class="border p-3">
-                        <p class="text-center text-muted mb-0">No document uploaded yet. Please attach a report to see the preview.</p>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="mb-3">
+        <label class="form-label" for="report_file">Attach Report</label>
+        <input type="file" class="form-control" name="report_file" id="report_file" required>
+    </div>
+
+                <div class="mb-3">
+        <label class="form-label" for="document_title">Document Title</label>
+        <input type="text" class="form-control" name="document_title" placeholder="Enter document title" required value="{{ form.document_title.value }}">
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="organization_name">Organization Name</label>
+        <select class="form-select" name="organization_name" required>
+            <option value="">Select organization</option>
+            <option value="GRI Standards" {% if form.organization_name.value == 'GRI Standards' %} selected {% endif %}>GRI Standards</option>
+            <option value="TCFD" {% if form.organization_name.value == 'TCFD' %} selected {% endif %}>TCFD</option>
+            <option value="SASB" {% if form.organization_name.value == 'SASB' %} selected {% endif %}>SASB</option>
+            <option value="King IV" {% if form.organization_name.value == 'King IV' %} selected {% endif %}>King IV</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="reporting_year">Reporting Year</label>
+        <select class="form-select" name="reporting_year" required>
+            <option value="2023" {% if form.reporting_year.value == '2023' %} selected {% endif %}>2023</option>
+            <option value="2022" {% if form.reporting_year.value == '2022' %} selected {% endif %}>2022</option>
+            <option value="2021" {% if form.reporting_year.value == '2021' %} selected {% endif %}>2021</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="report_type">Report Type</label>
+        <select class="form-select" name="report_type" required>
+            <option value="Annual" {% if form.report_type.value == 'Annual' %} selected {% endif %}>Annual Report</option>
+            <option value="Quarterly" {% if form.report_type.value == 'Quarterly' %} selected {% endif %}>Quarterly Report</option>
+            <option value="Interim" {% if form.report_type.value == 'Interim' %} selected {% endif %}>Interim Report</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="document_version">Document Version</label>
+        <input type="text" class="form-control" name="document_version" placeholder="Enter version number" value="{{ form.document_version.value }}" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="report_sector">Report Sector</label>
+        <select class="form-select" name="report_sector" required>
+            <option value="Energy" {% if form.report_sector.value == 'Energy' %} selected {% endif %}>Energy</option>
+            <option value="Manufacturing" {% if form.report_sector.value == 'Manufacturing' %} selected {% endif %}>Manufacturing</option>
+            <option value="Technology" {% if form.report_sector.value == 'Technology' %} selected {% endif %}>Technology</option>
+            <option value="Retail" {% if form.report_sector.value == 'Retail' %} selected {% endif %}>Retail</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="compliance_frameworks">Compliance Frameworks</label>
+        <select class="form-select" name="compliance_frameworks" required>
+            <option value="GRI" {% if form.compliance_frameworks.value == 'GRI' %} selected {% endif %}>GRI</option>
+            <option value="TCFD" {% if form.compliance_frameworks.value == 'TCFD' %} selected {% endif %}>TCFD</option>
+            <option value="SASB" {% if form.compliance_frameworks.value == 'SASB' %} selected {% endif %}>SASB</option>
+            <option value="King IV" {% if form.compliance_frameworks.value == 'King IV' %} selected {% endif %}>King IV</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="geographical_region">Geographical Region</label>
+        <select class="form-select" name="geographical_region" required>
+            <option value="Africa" {% if form.geographical_region.value == 'Africa' %} selected {% endif %}>Africa</option>
+            <option value="Asia" {% if form.geographical_region.value == 'Asia' %} selected {% endif %}>Asia</option>
+            <option value="Europe" {% if form.geographical_region.value == 'Europe' %} selected {% endif %}>Europe</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="report_description">Report Description</label>
+        <textarea class="form-control" name="report_description" rows="3" placeholder="Brief description of the report" required>{{ form.report_description.value }}</textarea>
+    </div>
+
+
+                <div class="mb-3">
+                    <p class="fw-semibold mb-1">Document Status</p>
+                    <div class="d-inline-flex align-items-center me-3">
+                        <input type="radio" name="document_status" id="status_active" value="active" {% if form.document_status.value == 'active' %} checked {% endif %} required>
+                        <label for="status_active" class="ms-2">Active</label>
+                    </div>
+                    <div class="d-inline-flex align-items-center">
+                        <input type="radio" name="document_status" id="status_inactive" value="inactive" {% if form.document_status.value == 'inactive' %} checked {% endif %} required>
+                        <label for="status_inactive" class="ms-2">Inactive</label>
                     </div>
                 </div>
+
+                <div class="card-footer d-flex justify-content-end p-0 pt-3">
+                    <button type="submit" class="btn btn-primary">
+                        Submit Report <i class="ph-paper-plane-tilt ms-2"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /ESG Compliance Form -->
+
+
+        <!-- Document Preview -->
+<div class="col-lg-8">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Document Preview</h5>
+        </div>
+        <div class="card-body">
+            <p class="text-muted">Uploaded document preview will appear here. You can review the contents before final submission.</p>
+            <div class="border p-3">
+                <!-- Initially show this message if no file is uploaded -->
+                <p class="text-center text-muted mb-0" id="preview-message">No document uploaded yet. Please attach a report to see the preview.</p>
+
+                <!-- Document Preview Area -->
+                <div id="document-preview" class="text-center">
+                    <!-- Here the preview will be inserted dynamically based on the file type -->
+                </div>
             </div>
         </div>
-        <!-- /Document Preview -->
+    </div>
+</div>
+<!-- /Document Preview -->
+
+<script>
+    // Preview document on file selection
+    document.getElementById('report_file').addEventListener('change', function(e) {
+        var file = e.target.files[0];
+        var previewArea = document.getElementById('document-preview');
+        var messageArea = document.getElementById('preview-message');
+        
+        if (file) {
+            messageArea.style.display = 'none';  // Hide the 'no file uploaded' message
+
+            var fileReader = new FileReader();
+            
+            // If file is an image (e.g., PNG, JPEG, etc.)
+            if (file.type.startsWith('image/')) {
+                fileReader.onload = function(event) {
+                    var img = document.createElement('img');
+                    img.src = event.target.result;
+                    img.style.maxWidth = '100%';
+                    img.style.maxHeight = '800px';
+                    previewArea.innerHTML = '';  // Clear the previous preview
+                    previewArea.appendChild(img);
+                };
+            }
+            // If file is a PDF
+            else if (file.type === 'application/pdf') {
+                fileReader.onload = function(event) {
+                    var pdfEmbed = document.createElement('embed');
+                    pdfEmbed.src = event.target.result;
+                    pdfEmbed.width = '100%';
+                    pdfEmbed.height = '1000px';
+                    pdfEmbed.type = 'application/pdf';
+                    previewArea.innerHTML = '';  // Clear the previous preview
+                    previewArea.appendChild(pdfEmbed);
+                };
+            }
+            // Add more file types (e.g., Word, Excel) as needed
+
+            fileReader.readAsDataURL(file);  // Read the file content as data URL
+        } else {
+            messageArea.style.display = 'block';  // Show the 'no file uploaded' message
+            previewArea.innerHTML = '';  // Clear the preview area
+        }
+    });
+</script>
+
     </div>
 </div>
 {% endblock %}
