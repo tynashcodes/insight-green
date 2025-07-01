@@ -17,3 +17,11 @@ class ESGComplianceReportForm(forms.ModelForm):
             'report_file', 
             'document_status'
         ]
+        
+        
+from .models import TestTable
+
+class TestTableForm(forms.ModelForm):
+    class Meta:
+        model = TestTable
+        fields = ['name', 'description']

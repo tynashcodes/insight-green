@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="content">
+    <div class="row">
+        <!-- ESG Compliance Documents Table -->
+         <!-- State saving -->
+					<div class="card">
+						<div class="card-header">
+							<h5 class="mb-0">Compliance Documents</h5>
+						</div>
+
+						<div class="card-body">
+							DataTables has the option of being able to <code>save the state</code> of a table: its paging position, ordering state etc., so that is can be restored when the user reloads a page, or comes back to the page after visiting a sub-page. This state saving ability is enabled by the <code>stateSave</code> option. The <code>duration</code> for which the saved state is valid can be set using the <code>stateDuration</code> initialisation parameter (2 hours by default).
+						</div>
+
+						<table class="table datatable-save-state">
+							<thead>
+								<tr>
+									<th>Document Title</th>
+									<th>Organization</th>
+									<th>Report Type</th>
+									<th>Year</th>
+									<th>Sector</th>
+									<th>Manage</th>
+								</tr>
+							</thead>
+							<tbody>
+                                {% for file in documents %}
+								<tr>
+									<td>{{ file.document_title }}</td>
+									<td>{{ file.organization_name }}</td>
+									<td>{{ file.report_type }}</td>
+									<td>{{ file.reporting_year }}</td>
+									<td>{{ file.report_sector }}</td>
+									<td class="text-center">
+										<a href="{% url 'extract_text' file.id %}">Extract Text</a>
+									</td>
+								</tr>
+                                {% endfor %}
+							</tbody>
+						</table>
+					</div>
+					<!-- /state saving -->
+
+<!-- /ESG Compliance Documents Table -->
+
+
+    </div>
+</div>
+{% endblock %}
