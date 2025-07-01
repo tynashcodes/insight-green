@@ -67,3 +67,14 @@ class ESGComplianceReport(models.Model):
     class Meta:
         ordering = ['-submitted_at']
 
+class TestTable(models.Model):
+    # Example test table for testing purposes
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['-created_at']
