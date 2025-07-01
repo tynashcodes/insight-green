@@ -1,0 +1,14 @@
+// 1. Run the following command to Back up Database
+// pg_dump -U postgres -h localhost -p 5432 -d insightgreen_db -F c -b -v -f "C:\insightgreen_back.backup"
+
+// 2. Create a new database named `insightgreen_db` if it doesn't exist
+// psql -U postgres -h localhost -p 5432 -c "CREATE DATABASE insightgreen_db;"
+
+// 3. Run the following command to restore Database
+// pg_restore -U postgres -h localhost -p 5432 -d insightgreen_db -v "C:\insightgreen_back.backup"
+
+// 4. Run the following command to verify the database
+// psql -U postgres -h localhost -p 5432 -d insightgreen_db
+
+// 5. List tables in the database
+// psql -U postgres -h localhost -p 5432 -d insightgreen_db -c "\dt"
