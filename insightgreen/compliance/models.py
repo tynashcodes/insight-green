@@ -54,7 +54,7 @@ class ESGComplianceReport(models.Model):
     report_type = models.CharField(max_length=50, choices=[('Annual', 'Annual Report'), ('Quarterly', 'Quarterly Report'), ('Interim', 'Interim Report')])
     document_version = models.CharField(max_length=50, blank=True)
     report_sector = models.CharField(max_length=100, choices=SECTOR_CHOICES)
-    compliance_frameworks = models.CharField(max_length=100, choices=COMPLIANCE_CHOICES)
+    compliance_frameworks = models.TextField()  # Changed to TextField to allow multiple selections
     geographical_region = models.CharField(max_length=50, choices=REGION_CHOICES)
     report_description = models.TextField(blank=True)
     report_file = models.FileField(upload_to='esg_reports/')

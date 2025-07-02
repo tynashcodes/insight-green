@@ -19,20 +19,38 @@ def graph(request):
     """
     return render(request, 'graph.html')
 
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .forms import ESGComplianceReportForm
+
 def compliance_report_upload(request):
     if request.method == 'POST':
         form = ESGComplianceReportForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            # Get the selected compliance frameworks (a list of values)
+            selected_compliance_frameworks = form.cleaned_data['compliance_frameworks']
+            
+            # Join the selected values into a comma-separated string
+            compliance_frameworks_str = ",".join(selected_compliance_frameworks)
+            
+            # Save the instance with the comma-separated values for compliance_frameworks
+            instance = form.save(commit=False)
+            instance.compliance_frameworks = compliance_frameworks_str
+            instance.save()
+
+            # Show a success message
             messages.success(request, 'ESG Compliance Report submitted successfully!')
-            return redirect('compliance_report_upload')  # Redirect to clear the form
+            return redirect('compliance_report_upload')  # Redirect to avoid resubmitting the form
         else:
             messages.error(request, 'Error submitting the report. Please check the form.')
             print(form.errors)  # Debug: print errors to terminal/log
     else:
         form = ESGComplianceReportForm()
-    
+
     return render(request, 'compliance/report_upload.html', {'form': form})
+
+
 
 
 # Create new record

@@ -3,6 +3,26 @@
 
 {% block content %}
 <div class="content">
+
+
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-icon-start alert-dismissible fade show">
+                <span class="alert-icon bg-{{ message.tags }} text-white">
+                    <i class="ph-bell-ringing"></i>
+                </span>
+                <span class="fw-semibold">{{ message }}</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+
+
+
     <div class="row">
         <!-- ESG Compliance Form -->
 <div class="col-lg-4">
@@ -16,9 +36,9 @@
                 {% csrf_token %}
 
                 <div class="mb-3">
-        <label class="form-label" for="report_file">Attach Report</label>
-        <input type="file" class="form-control" name="report_file" id="report_file" required>
-    </div>
+                    <label class="form-label" for="report_file">Attach Report</label>
+                    <input type="file" class="form-control" name="report_file" id="report_file" required>
+                </div>
 
                 <div class="mb-3">
         <label class="form-label" for="document_title">Document Title</label>
@@ -69,15 +89,16 @@
         </select>
     </div>
 
-    <div class="mb-3">
-        <label class="form-label" for="compliance_frameworks">Compliance Frameworks</label>
-        <select class="form-select" name="compliance_frameworks" required>
-            <option value="GRI" {% if form.compliance_frameworks.value == 'GRI' %} selected {% endif %}>GRI</option>
-            <option value="TCFD" {% if form.compliance_frameworks.value == 'TCFD' %} selected {% endif %}>TCFD</option>
-            <option value="SASB" {% if form.compliance_frameworks.value == 'SASB' %} selected {% endif %}>SASB</option>
-            <option value="King IV" {% if form.compliance_frameworks.value == 'King IV' %} selected {% endif %}>King IV</option>
-        </select>
-    </div>
+                                <div class="mb-3">
+    <label class="form-label" for="compliance_frameworks">Compliance Frameworks</label>
+    <select class="form-control multiselect" multiple="multiple" name="compliance_frameworks" required>
+        <option value="GRI" {% if 'GRI' in form.compliance_frameworks.value %} selected {% endif %}>GRI</option>
+        <option value="TCFD" {% if 'TCFD' in form.compliance_frameworks.value %} selected {% endif %}>TCFD</option>
+        <option value="SASB" {% if 'SASB' in form.compliance_frameworks.value %} selected {% endif %}>SASB</option>
+        <option value="King IV" {% if 'King IV' in form.compliance_frameworks.value %} selected {% endif %}>King IV</option>
+    </select>
+</div>
+
 
     <div class="mb-3">
         <label class="form-label" for="geographical_region">Geographical Region</label>
