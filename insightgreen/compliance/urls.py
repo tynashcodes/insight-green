@@ -7,5 +7,5 @@ urlpatterns = [
     path('compliance/report/upload', views.compliance_report_upload, name='compliance_report_upload'),
     path('new/', views.testtable_create, name='testtable_create'),
     path('compliance/documents/list', views.compliance_document_list, name='compliance_document_list'),
-    path('extract/<int:id>/', views.extract_text_from_pdf, name='extract_text'),
+    path('compliance/documents/extract/<int:id>/', views.extract_text_from_pdf, name='extract_text'),
 ]
