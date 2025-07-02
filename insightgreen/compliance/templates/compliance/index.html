@@ -5,5 +5,151 @@
 <div class="content">
 	<h1>Compliance Dashboard</h1>
 	<p>Welcome to the compliance dashboard. Here you can find all the relevant information and tools to ensure compliance with regulations.</p>
+
+	<!-- Peer Benchmarking & Comparative Analytics chart -->
+					<div class="card">
+						<div class="card-header">
+							<h5 class="mb-0">Peer Benchmarking & Comparative Analytics</h5>
+						</div>
+
+						<div class="card-body">
+							<p class="mb-3">Example of <code>combo</code> chart based on Google Visualization library. A chart that lets you render each series as a different marker type from the following list: line, area, bars, candlesticks, and stepped area. To assign a default marker type for series, specify the seriesType property. Use the series property to specify properties of each series individually.</p>
+
+							<div class="chart-container">
+								<div class="chart" id="google-combo"></div>
+							</div>
+						</div>
+					</div>
+					<!-- /combo chart -->
+
+
+
+					<!-- Tables -->
+
+				    <div class="row">
+				    	<div class="col-lg-12">
+				    		<div class="card">
+								<div class="card-header">
+									<h6 class="mb-0">Banks Comparison: Benchmarking Insights</h6>
+								</div>
+
+								<div class="card-body">
+									<b>Key Finding:</b> Our bank performs above market average overall but has signicant improvement 
+									opportunities in EU Taxonomy (69.0) and SARB guidance (72.3) areas. Top performers excel in TCFD 
+									implementation (89.0), suggesting this should be a priority focus area.
+								</div>
+
+								<div class="table-responsive">
+									<table class="table">
+										<thead>
+											<tr class="bg-primary border-primary text-white">
+												<th>Institution</th>
+												<th>Overall ESG Score</th>
+												<th>Framework Performance</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr class="border-primary">
+												<td>
+													<p class="d-block fw-bold">Standard Bank</p>
+													<div class="d-inline-flex align-items-center text-muted">Top Performer</div>
+												</td>
+												<td>
+													<div class="progress">
+														<div class="progress-bar bg-success" style="width: 85.3%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">85.3%</div>
+													</div>
+												</td>
+												<td>
+													<ul class="list-inline list-inline-bullet mb-0">
+														<li class="list-inline-item">IFRS S1/S2: <span class="text-success fw-semibold">88.2</span></li>
+														<li class="list-inline-item">TCFD: <span class="text-success fw-semibold">89.0</span></li>
+														<li class="list-inline-item">GRI: <span class="text-success fw-semibold">86.5</span></li>
+													</ul>
+													<ul class="list-inline list-inline-bullet mb-0">
+														<li class="list-inline-item">SASB: <span class="text-success fw-semibold">84.8</span></li>
+														<li class="list-inline-item">EU Taxonomy: <span class="text-success fw-semibold">82.3</span></li>
+														<li class="list-inline-item">SARB: <span class="text-success fw-semibold">80.2</span></li>
+													</ul>
+												</td>
+											</tr>
+
+											<tr>
+												<td>
+													<p class="d-block fw-bold">Nedbank</p>
+													<div class="d-inline-flex align-items-center text-muted">Industry Leader</div>
+												</td>
+												<td>
+													<div class="progress">
+														<div class="progress-bar bg-success" style="width: 82.1%" aria-valuenow="82.1" aria-valuemin="0" aria-valuemax="100">82.1%</div>
+													</div>
+												</td>
+												<td>
+													<ul class="list-inline list-inline-bullet mb-0">
+														<li class="list-inline-item">IFRS S1/S2: <span class="text-success fw-semibold">83.5</span></li>
+														<li class="list-inline-item">TCFD: <span class="text-success fw-semibold">84.2</span></li>
+														<li class="list-inline-item">GRI: <span class="text-success fw-semibold">85.7</span></li>
+													</ul>
+													<ul class="list-inline list-inline-bullet mb-0">
+														<li class="list-inline-item">SASB: <span class="text-success fw-semibold">80.9</span></li>
+														<li class="list-inline-item">EU Taxonomy: <span class="text-success fw-semibold">79.4</span></li>
+														<li class="list-inline-item">SARB: <span class="text-success fw-semibold">78.5</span></li>
+													</ul>
+												</td>
+											</tr>
+
+											<tr>
+												<td>
+													<p class="d-block fw-bold">Absa</p>
+													<div class="d-inline-flex align-items-center text-muted">Current Position</div>
+												</td>
+												<td>
+													<div class="progress">
+														<div class="progress-bar bg-indigo" style="width: 77.6%" aria-valuenow="77.6" aria-valuemin="0" aria-valuemax="100">77.6%</div>
+													</div>
+												</td>
+												<td>
+													<ul class="list-inline list-inline-bullet mb-0">
+														<li class="list-inline-item">IFRS S1/S2: <span class="text-primary fw-semibold">79.5</span></li>
+														<li class="list-inline-item">TCFD: <span class="text-warning fw-semibold">75.0</span></li>
+														<li class="list-inline-item">GRI: <span class="text-primary fw-semibold">82.0</span></li>
+													</ul>
+													<ul class="list-inline list-inline-bullet mb-0">
+														<li class="list-inline-item">SASB: <span class="text-primary fw-semibold">77.5</span></li>
+														<li class="list-inline-item">EU Taxonomy: <span class="text-warning fw-semibold">69.0</span></li>
+														<li class="list-inline-item">SARB: <span class="text-warning fw-semibold">72.3</span></li>
+													</ul>
+												</td>
+											</tr>
+
+											<tr>
+												<td>
+													<p class="d-block fw-bold">FNB</p>
+													<div class="d-inline-flex align-items-center text-muted">Market Average</div>
+												</td>
+												<td>
+													<div class="progress">
+														<div class="progress-bar bg-warning" style="width: 77.4%" aria-valuenow="77.4" aria-valuemin="0" aria-valuemax="100">77.4%</div>
+													</div>
+												</td>
+												<td>
+													<ul class="list-inline list-inline-bullet mb-0">
+														<li class="list-inline-item">IFRS S1/S2: <span class="text-warning fw-semibold">76.3</span></li>
+														<li class="list-inline-item">TCFD: <span class="text-warning fw-semibold">75.8</span></li>
+														<li class="list-inline-item">GRI: <span class="text-warning fw-semibold">78.2</span></li>
+													</ul>
+													<ul class="list-inline list-inline-bullet mb-0">
+														<li class="list-inline-item">SASB: <span class="text-warning fw-semibold">76.9</span></li>
+														<li class="list-inline-item">EU Taxonomy: <span class="text-warning fw-semibold">74.2</span></li>
+														<li class="list-inline-item">SARB: <span class="text-warning fw-semibold">71.5</span></li>
+													</ul>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /tables -->
 </div>
 {% endblock %}
