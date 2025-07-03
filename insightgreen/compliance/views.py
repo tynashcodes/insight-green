@@ -78,31 +78,66 @@ from django.shortcuts import get_object_or_404
 import re
 from django.http import JsonResponse
 
+def clean_pdf_text(text):
+    # Split text into lines
+    lines = text.splitlines()
+
+    cleaned_lines = []
+    buffer = ""
+
+    for line in lines:
+        stripped = line.strip()
+
+        if not stripped:
+            # Empty line — paragraph break
+            if buffer:
+                cleaned_lines.append(buffer)
+                buffer = ""
+            cleaned_lines.append("")
+        else:
+            if not buffer:
+                buffer = stripped
+            else:
+                # If buffer ends with punctuation, start new line
+                if re.search(r'[.,;:?!]$', buffer):
+                    cleaned_lines.append(buffer)
+                    buffer = stripped
+                else:
+                    # Otherwise join line with a space
+                    buffer += " " + stripped
+
+    # Append leftover buffer
+    if buffer:
+        cleaned_lines.append(buffer)
+
+    # Join paragraphs by newline
+    return "\n".join(cleaned_lines)
+
+
 def extract_text_from_pdf(request, id):
     doc = get_object_or_404(ESGComplianceReport, id=id)
 
     try:
         with doc.report_file.open(mode='rb') as f:
-            pdf = fitz.open(stream=f.read(), filetype="pdf")
+            import fitz  # PyMuPDF
+            pdf_doc = fitz.open(stream=f.read(), filetype="pdf")
+            text = ""
+            for page in pdf_doc:
+                text += page.get_text()
+            pdf_doc.close()
 
-            headings = set()
+        # Clean the extracted text for better readability
+        cleaned_text = clean_pdf_text(text)
 
-            for page in pdf:
-                blocks = page.get_text("dict")["blocks"]
-                for block in blocks:
-                    if "lines" in block:
-                        for line in block["lines"]:
-                            for span in line["spans"]:
-                                text = span.get("text", "").strip()
-                                font_size = span.get("size", 0)
-
-                                # You can tweak this threshold based on your PDF style
-                                if font_size >= 14 and text:
-                                    headings.add(text)
-
-            pdf.close()
-
-        return JsonResponse({"headings": sorted(headings)}, json_dumps_params={'indent': 2})
+        # Render extracted text in a template
+        return render(request, 'compliance/view_extracted_text.html', {
+            'document': doc,
+            'extracted_text': cleaned_text,
+            'file_details': doc,
+        })
 
     except Exception as e:
-        return JsonResponse({"error": str(e)}, status=500)
+        return render(request, 'compliance/view_extracted_text.html', {
+            'document': doc,
+            'error': f"Failed to extract text: {e}"
+        })
