@@ -1,7 +1,6 @@
 from django.db import models
 
 # Create your models here.
-from django.db import models
 
 class ESGComplianceReport(models.Model):
     # Organization Name Choices
@@ -89,7 +88,7 @@ class ESGComplianceReport(models.Model):
     report_sector = models.TextField()
     compliance_frameworks = models.TextField()  # Changed to TextField to allow multiple selections
     geographical_region = models.CharField(max_length=50, choices=REGION_CHOICES, default='Not Necessary')
-    report_description = models.TextField(blank=True)
+    geographical_region = models.CharField(max_length=50, choices=REGION_CHOICES, default='Africa')
     report_file = models.FileField(upload_to='esg_reports/')
     document_status = models.CharField(max_length=10, choices=[('active', 'Active'), ('inactive', 'Inactive')], default='active')
     submitted_at = models.DateTimeField(auto_now_add=True)
@@ -127,3 +126,16 @@ class ESGCompany(models.Model):
 
     def __str__(self):
         return self.company_name
+        
+        
+class ESGComplianceFramework(models.Model):
+    document = models.ForeignKey(ESGComplianceReport, on_delete=models.CASCADE, related_name='disclosures')
+    standard_area = models.CharField(max_length=255)
+    disclosure_title = models.CharField(max_length=255)  # e.g., "Disclosure 3-3 Management of material topics"
+    requirements = models.TextField()  # Store the requirements section as text
+    recommendations = models.TextField(blank=True)  # Store the recommendations section as text, if applicable
+    page_number = models.PositiveIntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.disclosure_title

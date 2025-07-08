@@ -1,6 +1,7 @@
+import json
 from django.contrib import messages
 from django.shortcuts import redirect, render
-from .models import ESGCompany, ESGComplianceReport
+from .models import ESGComplianceFramework, ESGComplianceReport
 
 import fitz  # PyMuPDF
 
@@ -80,25 +81,27 @@ def compliance_document_list(request):
     documents = ESGComplianceReport.objects.all()
     return render(request, 'compliance/document_list.html', {'documents': documents})
 
+
+    
 import os
-from django.conf import settings
-from django.http import FileResponse
-from django.shortcuts import get_object_or_404
 import re
+import fitz  # PyMuPDF
+import google.generativeai as genai
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from .models import ESGComplianceReport
+
+# Configure Gemini with your API key
+genai.configure(api_key="AIzaSyA5hzMuaEzsJC_mE5L4IorTi_RWcu6PSpQ")
 
 def clean_pdf_text(text):
-    # Split text into lines
     lines = text.splitlines()
-
     cleaned_lines = []
     buffer = ""
 
     for line in lines:
         stripped = line.strip()
-
         if not stripped:
-            # Empty line — paragraph break
             if buffer:
                 cleaned_lines.append(buffer)
                 buffer = ""
@@ -107,43 +110,83 @@ def clean_pdf_text(text):
             if not buffer:
                 buffer = stripped
             else:
-                # If buffer ends with punctuation, start new line
                 if re.search(r'[.,;:?!]$', buffer):
                     cleaned_lines.append(buffer)
                     buffer = stripped
                 else:
-                    # Otherwise join line with a space
                     buffer += " " + stripped
 
-    # Append leftover buffer
     if buffer:
         cleaned_lines.append(buffer)
 
-    # Join paragraphs by newline
     return "\n".join(cleaned_lines)
-
 
 def extract_text_from_pdf(request, id):
     doc = get_object_or_404(ESGComplianceReport, id=id)
 
     try:
         with doc.report_file.open(mode='rb') as f:
-            import fitz  # PyMuPDF
-            pdf_doc = fitz.open(stream=f.read(), filetype="pdf")
-            text = ""
-            for page in pdf_doc:
-                text += page.get_text()
-            pdf_doc.close()
+            pdf = fitz.open(stream=f.read(), filetype="pdf")
 
-        # Clean the extracted text for better readability
-        cleaned_text = clean_pdf_text(text)
+            page_texts = []
+            for i, page in enumerate(pdf, start=1):
+                raw_text = page.get_text()
+                cleaned = clean_pdf_text(raw_text)
+                page_texts.append(f"[Page {i}]\n{cleaned}")
 
-        # Render extracted text in a template
-        return render(request, 'compliance/view_extracted_text.html', {
-            'document': doc,
-            'extracted_text': cleaned_text,
-            'file_details': doc,
-        })
+            pdf.close()
+
+        full_text = "\n\n".join(page_texts)
+        truncated_text = full_text[:1000000]  # Limit to 1 million characters
+
+        prompt = f"""
+You are analyzing a text extracted from a sustainability PDF (like GRI Standards).
+
+Please extract all sections that:
+1. Start with a heading like "Disclosure X-X Title"
+2. Are followed by a REQUIREMENTS section — extract this fully
+3. If a RECOMMENDATIONS section normally comes after REQUIREMENTS, include it as well
+4. Ignore any GUIDANCE sections
+5. Preserve any bullet points, roman numerals, and numbers exactly as they appear — do not reformat or summarize
+6. Include the page number for each disclosure (i.e., the page where the disclosure starts)
+
+Format:
+[
+  {{
+    "disclosure": "Disclosure 3-1 Title",
+    "requirements": ["requirement 1", "requirement 2", "..."],
+    "recommendations": ["recommendation 1", "..."],  # optional
+    "page": 3
+  }},
+  ...
+]
+
+Here is the extracted document:
+\"\"\" 
+{truncated_text}
+\"\"\"
+"""
+
+        model = genai.GenerativeModel("gemini-2.0-flash")
+        response = model.generate_content(prompt)
+        result = response.text.strip()
+
+        # Try to load as JSON (clean any extra markdown if needed)
+        json_str = result.strip('```json').strip('```')
+        data = json.loads(json_str)
+
+        # Save to DB
+        for idx, item in enumerate(data):
+            disclosure = ESGComplianceFramework.objects.create(
+                document=doc,
+                disclosure_title=item.get("disclosure"),
+                page_number=item.get("page", 0),
+                requirements="\n".join(item.get("requirements", [])),
+                recommendations="\n".join(item.get("recommendations", [])) if "recommendations" in item else "",
+                standard_area=doc.document_title
+            )
+
+        return JsonResponse({"message": "Disclosures and requirements saved successfully", "count": len(data)})
 
     except Exception as e:
         return render(request, 'compliance/view_extracted_text.html', {
@@ -249,8 +292,6 @@ def upload_companies(request):
 
     companies = ESGCompany.objects.all().order_by('company_name')
     return render(request, 'compliance/upload_companies.html', {'form': form, 'companies': companies})
-
-
 
 
 
