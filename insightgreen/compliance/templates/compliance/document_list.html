@@ -33,8 +33,8 @@
 									<td>{{ file.report_type }}</td>
 									<td>{{ file.reporting_year }}</td>
 									<td>{{ file.report_sector }}</td>
-									<td class="text-center">
-										<a href="{% url 'extract_text' file.id %}">Extract Text</a>
+									<td>
+										<a href="{% url 'extract_text' file.id %}" class="btn btn-primary btn-icon rounded-pill"><i class="ph-navigation-arrow"></i></a>
 									</td>
 								</tr>
                                 {% endfor %}
