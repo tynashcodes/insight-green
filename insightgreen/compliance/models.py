@@ -88,7 +88,7 @@ class ESGComplianceReport(models.Model):
     report_sector = models.TextField()
     compliance_frameworks = models.TextField()  # Changed to TextField to allow multiple selections
     geographical_region = models.CharField(max_length=50, choices=REGION_CHOICES, default='Not Necessary')
-    geographical_region = models.CharField(max_length=50, choices=REGION_CHOICES, default='Africa')
+    report_description = models.TextField(blank=True)
     report_file = models.FileField(upload_to='esg_reports/')
     document_status = models.CharField(max_length=10, choices=[('active', 'Active'), ('inactive', 'Inactive')], default='active')
     submitted_at = models.DateTimeField(auto_now_add=True)
