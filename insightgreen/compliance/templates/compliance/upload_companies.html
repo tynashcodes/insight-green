@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="content">
+
+
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-icon-start alert-dismissible fade show">
+                <span class="alert-icon bg-{{ message.tags }} text-white">
+                    <i class="ph-bell-ringing"></i>
+                </span>
+                <span class="fw-semibold">{{ message }}</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+
+
+<div class="row">
+        <!-- ESG Compliance Form -->
+<div class="col-lg-4">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Upload ESG Company CSV</h5>
+        </div>
+
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label" for="{{ form.csv_file.id_for_label }}">Company List</label>
+                    {{ form.csv_file }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="{{ form.import_mode.id_for_label }}">Import Mode</label>
+                    {{ form.import_mode }}
+                </div>
+
+
+                <div class="card-footer d-flex justify-content-end p-0 pt-3">
+                    <button type="submit" class="btn btn-primary">
+                        Upload Companies <i class="ph-paper-plane-tilt ms-2"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /ESG Compliance Form -->
+
+
+        <!-- Document Preview -->
+        <div class="col-lg-8">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Companies</h5>
+        </div>
+        <div class="card-body">
+            <p class="text-muted">Currently uploaded companies.</p>
+
+            {% if companies %}
+            <div class="table-responsive">
+                <table class="table datatable-button-html5-columns">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Tel</th>
+                            <th>Email</th>
+                            <th>Website</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for company in companies %}
+                        <tr>
+                            <td>{{ company.company_name }}</td>
+                            <td>{{ company.contact_number }}</td>
+                            <td>{{ company.contact_email }}</td>
+                            <td><a href="{{ company.website_url }}" target="_blank">{{ company.website_url }}</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-center text-muted mb-0">No companies in the system yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+        <!-- /Document Preview -->
+
+    </div>
+</div>
+
+
+{% endblock %}
+
