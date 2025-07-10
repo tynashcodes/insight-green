@@ -1,7 +1,7 @@
 import json
 from django.contrib import messages
 from django.shortcuts import redirect, render
-from .models import ESGComplianceFramework, ESGComplianceReport
+from .models import ESGComplianceFramework, ESGComplianceReport, ESGReport
 
 import fitz  # PyMuPDF
 
@@ -200,6 +200,31 @@ Here is the extracted document:
 
 
 
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .forms import ESGReportForm
+
+def upload_corporate_report(request):
+    if request.method == 'POST':
+        form = ESGReportForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "ESG Corporate Report uploaded successfully.")
+            return redirect('upload_corporate_report')  # Or wherever you want
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = ESGReportForm()
+
+    return render(request, 'compliance/upload_corporate_report.html', {
+        'form': form
+    })
+
+
+
+
+
+
 
 
 import csv
@@ -295,5 +320,12 @@ def upload_companies(request):
 
 
 
+def corporate_report_list(request):
+    reports = ESGReport.objects.all()
+    return render(request, 'compliance/corporate_report_list.html', {'reports': reports})
 
 
+
+
+
+    
