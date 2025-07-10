@@ -35,7 +35,112 @@
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
 
-                {{ form.as_p }}
+                <div class="mb-3">
+                    <label class="form-label" for="report_file">Attach Corporate Report</label>
+                    <input type="file" class="form-control" name="report_file" id="report_file" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="document_title">ESG Report Title</label>
+                    <input type="text" class="form-control" name="document_title" placeholder="e.g. Annual Report 2024" required value="">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="organization_name">Company Name</label>
+                    <select class="form-select" name="organization_name" required>
+                        {% for value, label in form.organization_name.field.choices %}
+                            <option value="{{ value }}" {% if form.organization_name.value == value %} selected {% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="industry_sector">Industry / Sector</label>
+                    <select class="form-select" name="industry_sector" required>
+                        {% for value, label in form.industry_sector.field.choices %}
+                            <option value="{{ value }}" {% if form.industry_sector.value == value %} selected {% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+
+                <div class="mb-3">
+                    <label class="form-label" for="organization_type">Organization Type</label>
+                    <select class="form-select" name="organization_type" required>
+                        {% for value, label in form.organization_type.field.choices %}
+                            <option value="{{ value }}" {% if form.organization_type.value == value %} selected {% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="country_region">Country / Region</label>
+                    <select class="form-select" name="country_region" required>
+                        {% for value, label in form.country_region.field.choices %}
+                            <option value="{{ value }}" {% if form.country_region.value == value %} selected {% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="reporting_year">Reporting Year</label>
+                    <select class="form-select" name="reporting_year" required>
+                        {% for value, label in form.reporting_year.field.choices %}
+                            <option value="{{ value }}" {% if form.reporting_year.value == value %} selected {% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="reporting_period">Reporting Period</label>
+                    <select class="form-select" name="reporting_period" required>
+                        {% for value, label in form.reporting_period.field.choices %}
+                            <option value="{{ value }}" {% if form.reporting_period.value == value %} selected {% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="standards_applied">Standards Applied</label>
+
+                    <select class="form-control multiselect" multiple="multiple" data-include-select-all-option="true" data-enable-filtering="true" data-enable-case-insensitive-filtering="true" name="standards_applied" required>
+                        {% for value, label in form.standards_applied.field.choices %}
+                            <option value="{{ value }}" {% if value in form.standards_applied.value %} selected {% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="report_type">Reporting Frequency</label>
+                    <select class="form-select" name="report_type" required>
+                        {% for value, label in form.report_type.field.choices %}
+                            <option value="{{ value }}" {% if form.report_type.value == value %} selected {% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="is_peer_report">Is Peer Report</label>
+                    <select class="form-select" name="is_peer_report" required>
+                        <option value="">Select an option</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="is_confidential">Is Confidential</label>
+                    <select class="form-select" name="is_confidential" required>
+                        <option value="">Select an option</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="peer_group_name">Peer Group Name</label>
+                    <input type="text" class="form-control" name="peer_group_name" placeholder="e.g. JSE Top 40" value="">
+                </div>
 
                 <div class="card-footer d-flex justify-content-end p-0 pt-3">
                     <button type="submit" class="btn btn-primary">
