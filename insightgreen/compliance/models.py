@@ -130,10 +130,11 @@ class ESGCompany(models.Model):
         
 class ESGComplianceFramework(models.Model):
     document = models.ForeignKey(ESGComplianceReport, on_delete=models.CASCADE, related_name='disclosures')
-    standard_area = models.CharField(max_length=255)
-    disclosure_title = models.CharField(max_length=255)  # e.g., "Disclosure 3-3 Management of material topics"
+    standard_area = models.CharField(max_length=255, null=True, blank=True)
+    sub_standard_area = models.TextField()  # Optional, for more detailed categorization
+    disclosure_title = models.CharField(max_length=255, null=True, blank=True)  # e.g., "Disclosure 3-3 Management of material topics"
     requirements = models.TextField()  # Store the requirements section as text
-    recommendations = models.TextField(blank=True)  # Store the recommendations section as text, if applicable
+    recommendations = models.TextField()  # Store the recommendations section as text, if applicable
     page_number = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
 

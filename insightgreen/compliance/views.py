@@ -127,72 +127,103 @@ def extract_text_from_pdf(request, id):
     try:
         with doc.report_file.open(mode='rb') as f:
             pdf = fitz.open(stream=f.read(), filetype="pdf")
-
             page_texts = []
             for i, page in enumerate(pdf, start=1):
                 raw_text = page.get_text()
                 cleaned = clean_pdf_text(raw_text)
                 page_texts.append(f"[Page {i}]\n{cleaned}")
-
             pdf.close()
 
         full_text = "\n\n".join(page_texts)
-        truncated_text = full_text[:1000000]  # Limit to 1 million characters
+        truncated_text = full_text[:1000000]
 
-        prompt = f"""
-You are analyzing a text extracted from a sustainability PDF (like GRI Standards).
+        # Determine which prompt to use
+        if "GRI" in doc.compliance_frameworks:
+            prompt = f"""
+You are analyzing a text extracted from a sustainability PDF based on GRI Standards.
 
 Please extract all sections that:
 1. Start with a heading like "Disclosure X-X Title"
 2. Are followed by a REQUIREMENTS section — extract this fully
-3. If a RECOMMENDATIONS section normally comes after REQUIREMENTS, include it as well
+3. If a RECOMMENDATIONS section comes after REQUIREMENTS, include it as well
 4. Ignore any GUIDANCE sections
-5. Preserve any bullet points, roman numerals, and numbers exactly as they appear — do not reformat or summarize
-6. Include the page number for each disclosure (i.e., the page where the disclosure starts)
+5. Preserve bullet points, roman numerals, and numbers exactly as they appear
+6. Include the page number where each disclosure begins
 
 Format:
 [
   {{
     "disclosure": "Disclosure 3-1 Title",
-    "requirements": ["requirement 1", "requirement 2", "..."],
-    "recommendations": ["recommendation 1", "..."],  # optional
+    "requirements": ["..."],
+    "recommendations": ["..."],  # optional
     "page": 3
   }},
   ...
 ]
 
-Here is the extracted document:
-\"\"\" 
+Text:
+\"\"\"
 {truncated_text}
 \"\"\"
 """
+        elif "IFRS S2" in doc.document_title:
+            prompt = f"""
+You are analyzing a text extracted from an IFRS S2 PDF focused on climate-related disclosures.
+
+Please extract sections that:
+1. Cover the following four pillars as standard areas or disclosures: Governance, Strategy, Risk Management, Metrics and Targets
+2. Sub Standard Area is a sub heading under each standard area e.g. Climate-related risks and opportunities, Business model and value chain etc. under Strategy and disclosure title is the main heading e.g. Strategy
+3. Requirements are the specific requirements under each sub standard area and sometimes a standard area has requirements as well, take everything under the sub standard area or standard area as requirements even bold paragraphs
+4. There are no RECOMMENDATIONS in IFRS S2.
+5. Preserve section titles and bullet point structure (numbers, roman numerals, bullets) exactly as they appear
+6. For each section, include the page number where it was found
+
+Format:
+[
+  {{
+    "disclosure": "Strategy",
+    "requirements": ["..."],
+    "sub_standard_area": "",
+    "page": 4
+  }},
+  ...
+]
+
+Text:
+\"\"\"
+{truncated_text}
+\"\"\"
+"""
+        else:
+            return JsonResponse({'error': 'Unknown compliance framework. GRI or IFRS S2 expected.'}, status=400)
 
         model = genai.GenerativeModel("gemini-2.0-flash")
-        response = model.generate_content(prompt)
+        response = model.generate_content(prompt.strip())
         result = response.text.strip()
 
-        # Try to load as JSON (clean any extra markdown if needed)
         json_str = result.strip('```json').strip('```')
         data = json.loads(json_str)
 
         # Save to DB
-        for idx, item in enumerate(data):
-            disclosure = ESGComplianceFramework.objects.create(
+        for item in data:
+            ESGComplianceFramework.objects.create(
                 document=doc,
                 disclosure_title=item.get("disclosure"),
                 page_number=item.get("page", 0),
                 requirements="\n".join(item.get("requirements", [])),
                 recommendations="\n".join(item.get("recommendations", [])) if "recommendations" in item else "",
+                sub_standard_area=item.get("sub_standard_area", "") if "sub_standard_area" in item else "",
                 standard_area=doc.document_title
             )
 
-        return JsonResponse({"message": "Disclosures and requirements saved successfully", "count": len(data)})
+        return JsonResponse({"message": "Disclosures saved", "count": len(data)})
 
     except Exception as e:
         return render(request, 'compliance/view_extracted_text.html', {
             'document': doc,
             'error': f"Failed to extract text: {e}"
         })
+
     
 
 
