@@ -140,3 +140,108 @@ class ESGComplianceFramework(models.Model):
 
     def __str__(self):
         return self.disclosure_title
+
+
+
+
+
+
+
+
+
+from django.db import models
+from .models import ESGCompany  # assuming ESGCompany is in the same app
+
+class ESGReport(models.Model):
+
+    # Industry Sectors Choices
+    SECTOR_CHOICES = [
+        ('Energy', 'Energy'),
+        ('Financials', 'Financial Services'),
+        ('Healthcare', 'Healthcare'),
+        ('Consumer Goods', 'Consumer Goods'),
+        ('Technology', 'Technology'),
+        ('Materials', 'Materials'),
+        ('Industrials', 'Industrials'),
+        ('Utilities', 'Utilities'),
+        ('Consumer Services', 'Consumer Services'),
+        ('Real Estate', 'Real Estate'),
+        ('Telecommunication Services', 'Telecommunications'),
+        ('Consumer Discretionary', 'Consumer Discretionary'),
+        ('Consumer Staples', 'Consumer Staples'),
+        ('Basic Materials', 'Basic Materials'),
+        ('Transportation', 'Transportation'),
+        ('Healthcare Services', 'Healthcare Services'),
+        ('Leisure & Luxury Goods', 'Leisure & Luxury Goods'),
+        ('Pharmaceuticals', 'Pharmaceuticals'),
+        ('Renewables', 'Renewables'),
+        ('Chemicals', 'Chemicals'),
+        ('Mining', 'Mining'),
+        ('Forestry & Paper', 'Forestry & Paper'),
+        ('Agriculture', 'Agriculture'),
+        ('Construction & Engineering', 'Construction & Engineering'),
+    ]
+
+    # Geographical Region Choices
+    REGION_CHOICES = [
+        ('Africa', 'Africa'),
+        ('Asia', 'Asia'),
+        ('Europe', 'Europe'),
+        ('North America', 'North America'),
+        ('South America', 'South America'),
+        ('Oceania', 'Oceania'),
+    ]
+
+    # Organization Type Choices
+    ORGANIZATION_TYPE_CHOICES = [
+        ('Public Company', 'Public Company'),
+        ('Private Company', 'Private Company'),
+        ('Government Entity', 'Government Entity'),
+        ('Non-Profit', 'Non-Profit'),
+        ('Financial Institution', 'Financial Institution'),
+        ('State-Owned Enterprise', 'State-Owned Enterprise'),
+        ('Multinational Corporation', 'Multinational Corporation'),
+        ('Startup', 'Startup'),
+        ('SME', 'Small & Medium Enterprise'),
+        ('Other', 'Other'),
+    ]
+
+    # Report Type Choices
+    REPORT_TYPE_CHOICES = [
+        ('Sustainability', 'Sustainability Report'),
+        ('Integrated', 'Integrated Report'),
+        ('Climate', 'Climate Report'),
+        ('Annual', 'Annual Report'),
+        ('Financial and ESG', 'Financial and ESG Report'),
+        ('Other', 'Other'),
+    ]
+
+
+
+    # Fields
+    report_file = models.FileField(upload_to='corporate_reports/')
+    document_title = models.CharField(max_length=255)
+    
+    organization_name = models.ForeignKey(ESGCompany, on_delete=models.CASCADE)
+    
+    industry_sector = models.CharField(max_length=255, choices=SECTOR_CHOICES)
+    organization_type = models.CharField(max_length=255, choices=ORGANIZATION_TYPE_CHOICES)
+    country_region = models.CharField(max_length=50, choices=REGION_CHOICES)
+
+    reporting_year = models.IntegerField(choices=[(year, year) for year in range(2019, 2026)], default=2025)
+
+    reporting_period = models.CharField(max_length=100, choices=[('Annual', 'Annual Report'), ('Quarterly', 'Quarterly Report'), ('Periodic', 'Periodic Updates')])
+
+    standards_applied = models.TextField()  # Can be a list or free text about which ESG standards are applied
+    report_type = models.CharField(max_length=100, choices=REPORT_TYPE_CHOICES, default='Annual')
+
+    is_peer_report = models.BooleanField(default=False)
+    peer_group_name = models.CharField(max_length=255, blank=True, null=True)
+
+    is_confidential = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.document_title} - {self.organization_name}"
+
+

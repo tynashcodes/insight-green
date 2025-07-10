@@ -136,3 +136,62 @@ class CompanyCSVUploadForm(forms.Form):
 
 
 
+
+from django import forms
+from .models import ESGCompany, ESGReport  # ✅ Make sure ESGReport is imported!
+
+class ESGReportForm(forms.ModelForm):
+
+    # Compliance Framework Choices
+    COMPLIANCE_CHOICES = [
+        ('GRI', 'GRI (Global Reporting Initiative)'),
+        ('TCFD', 'TCFD (Task Force on Climate-related Financial Disclosures)'),
+        ('SASB', 'SASB (Sustainability Accounting Standards Board)'),
+        ('King IV', 'King IV (South Africa)'),
+        ('ISO 26000', 'ISO 26000 (Social Responsibility)'),
+        ('ISO 14001', 'ISO 14001 (Environmental Management Systems)'),
+        ('ISO 37001', 'ISO 37001 (Anti-bribery Management Systems)'),
+        ('PRI', 'PRI (Principles for Responsible Investment)'),
+        ('OECD Guidelines', 'OECD Guidelines for Multinational Enterprises'),
+        ('NFRD', 'NFRD (Non-Financial Reporting Directive)'),
+        ('CDP', 'CDP (Carbon Disclosure Project)'),
+        ('SFDR', 'SFDR (Sustainable Finance Disclosure Regulation)'),
+        ('EU Taxonomy', 'EU Taxonomy Regulation'),
+        ('UN SDGs', 'UN Sustainable Development Goals (SDGs)'),
+    ]
+
+
+    organization_name = forms.ModelChoiceField(
+        queryset=ESGCompany.objects.all(),
+        to_field_name='company_name',
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        required=True,
+        empty_label="Select a company"
+    )
+
+    # Multiselect Fields
+    standards_applied = forms.MultipleChoiceField(
+        choices=COMPLIANCE_CHOICES,
+        widget=forms.SelectMultiple(attrs={'class': 'form-control multiselect'}),
+        required=True
+    )
+
+    class Meta:
+        model = ESGReport
+        fields = [
+            'report_file',
+            'document_title',
+            'organization_name',
+            'industry_sector',
+            'organization_type',
+            'country_region',
+            'reporting_year',
+            'reporting_period',
+            'report_type',
+            'standards_applied',
+            'is_peer_report',
+            'peer_group_name',
+            'is_confidential',
+        ]
+
+
