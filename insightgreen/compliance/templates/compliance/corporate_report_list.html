@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="content">
+    <div class="row">
+        <!-- ESG Compliance Documents Table -->
+         <!-- State saving -->
+					<div class="card">
+						<div class="card-header">
+							<h5 class="mb-0">Corporate Reports</h5>
+						</div>
+
+						<div class="card-body">
+							DataTables has the option of being able to <code>save the state</code> of a table: its paging position, ordering state etc., so that is can be restored when the user reloads a page, or comes back to the page after visiting a sub-page. This state saving ability is enabled by the <code>stateSave</code> option. The <code>duration</code> for which the saved state is valid can be set using the <code>stateDuration</code> initialisation parameter (2 hours by default).
+						</div>
+
+						<div class="table-responsive">
+                            <table class="table datatable-button-html5-columns">
+                                <thead>
+                                    <tr>
+                                        <th>Document Title</th>
+                                        <th>Organization Name</th>
+                                        <th>Industry Sector</th>
+                                        <th>Organization Type</th>
+                                        <th>Country/Region</th>
+                                        <th>Reporting Year</th>
+                                        <th>Reporting Period</th>
+                                        <th>Standards Applied</th>  
+                                        <th>Report Type</th>
+                                        <th>Is Peer Report</th>
+                                        <th>Peer Group Name</th>
+                                        <th>Is Confidential</th>
+                                        <th>Created At</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for report in reports %}
+                                        <tr>
+                                            <td>{{ report.document_title }}</td>
+                                            <td>{{ report.organization_name }}</td>
+                                            <td>{{ report.industry_sector }}</td>
+                                            <td>{{ report.organization_type }}</td>
+                                            <td>{{ report.country_region }}</td>
+                                            <td>{{ report.reporting_year }}</td>
+                                            <td>{{ report.reporting_period }}</td>
+                                            <td>{{ report.standards_applied }}</td>
+                                            <td>{{ report.report_type }}</td>
+                                            <td>{{ report.is_peer_report }}</td>
+                                            <td>{{ report.peer_group_name }}</td>
+                                            <td>{{ report.is_confidential }}</td>
+                                            <td>{{ report.created_at }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- /state saving -->
+
+<!-- /ESG Compliance Documents Table -->
+
+</div>
+{% endblock %}

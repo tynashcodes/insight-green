@@ -10,4 +10,5 @@ urlpatterns = [
     path('compliance/documents/extract/<int:id>/', views.extract_text_from_pdf, name='extract_text'),
     path('corporate/upload', views.upload_companies, name='upload_companies'),
     path('corporate/report/upload', views.upload_corporate_report, name='upload_corporate_report'),
+    path('corporate/report/list', views.corporate_report_list, name='corporate_report_list'),
 ]
