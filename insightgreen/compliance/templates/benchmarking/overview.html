@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% load static %}
+
+				{% block header %}
+                <!-- Page header -->
+				<div class="page-header page-header-light shadow">
+					<div class="page-header-content d-lg-flex">
+						<div class="d-flex">
+							<h4 class="page-title mb-0">
+								Peer Benchmarking - <span class="fw-normal">Overview</span>
+							</h4>
+
+							<a href="#page_header" class="btn btn-light align-self-center collapsed d-lg-none border-transparent rounded-pill p-0 ms-auto" data-bs-toggle="collapse">
+								<i class="ph-caret-down collapsible-indicator ph-sm m-1"></i>
+							</a>
+						</div>
+					</div>
+
+					<div class="navbar navbar-expand-lg border-top py-2">
+						<div class="container-fluid">
+							<ul class="nav navbar-nav flex-row flex-fill">
+								<li class="nav-item me-1">
+									<a href="#activity" class="navbar-nav-link navbar-nav-link-icon active rounded" data-bs-toggle="tab">
+										<div class="d-flex align-items-center mx-lg-1">
+											<i class="ph-activity"></i>
+											<span class="d-lg-inline-block ms-2">Overview</span>
+										</div>
+									</a>
+								</li>
+								<li class="nav-item me-1">
+									<a href="#schedule" class="navbar-nav-link navbar-nav-link-icon rounded" data-bs-toggle="tab">
+										<div class="d-flex align-items-center mx-lg-1">
+											<i class="ph-swatches"></i>
+											<span class="d-lg-inline-block ms-2">
+												IFRS S1
+											</span>
+										</div>
+									</a>
+								</li>
+								<li class="nav-item me-1">
+									<a href="#settings" class="navbar-nav-link navbar-nav-link-icon rounded" data-bs-toggle="tab">
+										<div class="d-flex align-items-center mx-lg-1">
+											<i class="ph-chart-bar"></i>
+											<span class="d-lg-inline-block ms-2">IFRS S2</span>
+										</div>
+									</a>
+								</li>
+
+                                <li class="nav-item me-1">
+									<a href="#settings" class="navbar-nav-link navbar-nav-link-icon rounded" data-bs-toggle="tab">
+										<div class="d-flex align-items-center mx-lg-1">
+											<i class="ph-chart-line"></i>
+											<span class="d-lg-inline-block ms-2">TCFD</span>
+										</div>
+									</a>
+								</li>
+
+								<li class="nav-item d-lg-none ms-auto">
+									<a href="#profile_nav" class="navbar-nav-link navbar-nav-link-icon collapsed rounded" data-bs-toggle="collapse">
+										<i class="ph-caret-down collapsible-indicator"></i>
+									</a>
+								</li>
+							</ul>
+
+							<div class="navbar-collapse collapse" id="profile_nav">
+								<ul class="navbar-nav ms-lg-auto mt-2 mt-lg-0">
+									<!--
+                                    <li class="nav-item ms-lg-1">
+										<a href="#" class="navbar-nav-link rounded">
+											<i class="ph-note me-2"></i>
+											Notes
+										</a>
+									</li>
+									<li class="nav-item ms-lg-1">
+										<a href="#" class="navbar-nav-link rounded">
+											<i class="ph-users me-2"></i>
+											Friends
+										</a>
+									</li>
+									<li class="nav-item ms-lg-1">
+										<a href="#" class="navbar-nav-link rounded">
+											<i class="ph-image me-2"></i>
+											Photos
+										</a>
+									</li>
+                                    -->
+									<li class="nav-item dropdown ms-lg-1">
+										<a href="#" class="navbar-nav-link rounded dropdown-toggle" data-bs-toggle="dropdown">
+											<i class="ph-arrow-right"></i>
+											<span class="d-lg-inline-block ms-2">More</span>
+										</a>
+
+										<div class="dropdown-menu dropdown-menu-end">
+											<a href="#" class="dropdown-item">
+												<i class="ph-clipboard-text me-2"></i>
+												GRI
+											</a>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /page header -->
+				
+				{% endblock %}
+
+
+				{% block content %}
+                <!-- Content area -->
+				<div class="content">
+					<div class="tab-content flex-1 order-2 order-lg-1">
+						<div class="tab-pane fade active show" id="activity">
+
+							<div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Peer Benchmarking & Comparative Analytics</h5>
+                                </div>
+        
+                                <div class="card-body">
+                                    <p class="mb-3">Example of <code>combo</code> chart based on Google Visualization library. A chart that lets you render each series as a different marker type from the following list: line, area, bars, candlesticks, and stepped area. To assign a default marker type for series, specify the seriesType property. Use the series property to specify properties of each series individually.</p>
+        
+                                    <div class="chart-container">
+                                        <div class="chart" id="google-combo"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /combo chart -->
+
+					    </div>
+
+					    <div class="tab-pane fade" id="schedule">
+
+				    		<div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Peer Benchmarking & Comparative Analytics</h5>
+                                </div>
+        
+                                <div class="card-body">
+                                    <p class="mb-3">Example of <code>combo</code> chart based on Google Visualization library. A chart that lets you render each series as a different marker type from the following list: line, area, bars, candlesticks, and stepped area. To assign a default marker type for series, specify the seriesType property. Use the series property to specify properties of each series individually.</p>
+        
+                                    <div class="chart-container">
+                                        <div class="chart" id="google-combo"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /combo chart -->
+
+				    	</div>
+
+					    <div class="tab-pane fade" id="settings">
+
+							<div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Peer Benchmarking & Comparative Analytics</h5>
+                                </div>
+        
+                                <div class="card-body">
+                                    <p class="mb-3">Example of <code>combo</code> chart based on Google Visualization library. A chart that lets you render each series as a different marker type from the following list: line, area, bars, candlesticks, and stepped area. To assign a default marker type for series, specify the seriesType property. Use the series property to specify properties of each series individually.</p>
+        
+                                    <div class="chart-container">
+                                        <div class="chart" id="google-combo"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /combo chart -->
+
+				    	</div>
+					</div>
+				</div>
+				<!-- /content area -->
+                {% endblock %}

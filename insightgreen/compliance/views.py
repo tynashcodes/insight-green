@@ -1,7 +1,7 @@
 import json
 from django.contrib import messages
 from django.shortcuts import redirect, render
-from .models import ESGComplianceFramework, ESGComplianceReport, ESGReport
+from .models import ESGComplianceFramework, ESGComplianceReport
 
 import fitz  # PyMuPDF
 
@@ -200,27 +200,6 @@ Here is the extracted document:
 
 
 
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from .forms import ESGReportForm
-
-def upload_corporate_report(request):
-    if request.method == 'POST':
-        form = ESGReportForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "ESG Corporate Report uploaded successfully.")
-            return redirect('upload_corporate_report')  # Or wherever you want
-        else:
-            messages.error(request, "Please correct the errors below.")
-    else:
-        form = ESGReportForm()
-
-    return render(request, 'compliance/upload_corporate_report.html', {
-        'form': form
-    })
-
-
 
 
 
@@ -320,12 +299,121 @@ def upload_companies(request):
 
 
 
-def corporate_report_list(request):
-    reports = ESGReport.objects.all()
-    return render(request, 'compliance/corporate_report_list.html', {'reports': reports})
 
 
 
 
+
+
+from django.shortcuts import render, redirect
+from .models import ESGReportBatch
+from .forms import ESGReportBatchForm
+
+def create_esg_report_batch(request):
+    if request.method == 'POST':
+        form = ESGReportBatchForm(request.POST)
+        if form.is_valid():
+                form.save()
+                # return redirect('esg_report_batch_success')  # Redirect to a success page
+    else:
+        form = ESGReportBatchForm()
+    
+    return render(request, 'compliance/create_esg_report_batch.html', {'form': form})
 
     
+
+
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from .models import ESGReportBatch, CorporateBulkESGReports
+from .forms import CorporateBulkESGReportsForm
+from django.contrib import messages
+
+def upload_bulk_reports(request, batch_id):
+    # Get the batch object or redirect if not found
+    try:
+        batch = ESGReportBatch.objects.get(id=batch_id)
+    except ESGReportBatch.DoesNotExist:
+        return HttpResponse('Batch not found', status=404)
+
+    if request.method == 'POST':
+        form = CorporateBulkESGReportsForm(request.POST, request.FILES)
+        if form.is_valid():
+            report = form.save(commit=False)
+            report.batch = batch  # Associate the report with the batch
+            
+            # Join the selected standards into a comma-separated string
+            report.standards_applied = ",".join(form.cleaned_data['standards_applied'])
+            
+            report.save()
+            messages.success(request, "Report uploaded successfully!")
+        else:
+            messages.error(request, "There was an error with your submission. Please check the form.")
+    
+    else:
+        form = CorporateBulkESGReportsForm()
+
+    context = {
+        'batch': batch,
+        'form': form,
+    }
+    
+    return render(request, 'compliance/upload_bulk_reports.html', context)
+
+
+
+from django.shortcuts import render, redirect
+from .models import ESGReportBatch
+
+
+def list_esg_report_batch(request):
+    # Fetch all ESGReportBatch objects
+    batches = ESGReportBatch.objects.all()
+
+    context = {
+        'batches': batches
+    }
+
+    return render(request, 'compliance/list_esg_report_batch.html', context)
+
+
+
+
+from django.shortcuts import render
+from .models import CorporateBulkESGReports  # Updated model name
+from django.contrib import messages
+
+def list_corporate_report_batch(request):
+    # Fetch all CorporateBulkESGReports objects and related ESGReportBatch data
+    reports = CorporateBulkESGReports.objects.select_related('batch').all()  # Use 'batch' to reference the ForeignKey
+
+    # Add a message if there are no reports
+    if not reports:
+        messages.info(request, "No corporate ESG reports available.")
+
+    context = {
+        'reports': reports
+    }
+
+    return render(request, 'compliance/list_corporate_report_batch.html', context)
+
+
+
+
+def peer_benchmarking_overview(request):
+    return render(request, 'benchmarking/overview.html')
+
+
+
+
+
+
+
+from django.shortcuts import render
+from .models import ESGReportBatch, CorporateBulkESGReports
+
+def report_batch_list(request):
+    # Query for ESGReportBatch with related CorporateBulkESGReports
+    report_batches = ESGReportBatch.objects.prefetch_related('reports').all()
+
+    return render(request, 'compliance/report_batch_list.html', {'report_batches': report_batches})

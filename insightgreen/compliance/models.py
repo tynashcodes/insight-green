@@ -151,8 +151,7 @@ class ESGComplianceFramework(models.Model):
 from django.db import models
 from .models import ESGCompany  # assuming ESGCompany is in the same app
 
-class ESGReport(models.Model):
-
+class ESGReportBatch(models.Model):
     # Industry Sectors Choices
     SECTOR_CHOICES = [
         ('Energy', 'Energy'),
@@ -205,6 +204,26 @@ class ESGReport(models.Model):
         ('Other', 'Other'),
     ]
 
+    # Shared fields for all reports in this batch
+    organization_name = models.ForeignKey(ESGCompany, on_delete=models.CASCADE)
+    industry_sector = models.CharField(max_length=255, choices=SECTOR_CHOICES)
+    country_region = models.CharField(max_length=50, choices=REGION_CHOICES)
+    organization_type = models.CharField(max_length=255, choices=ORGANIZATION_TYPE_CHOICES)
+    peer_group_name = models.CharField(max_length=255, blank=True, null=True)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"Batch for {self.organization_name} - {self.peer_group_name}"
+
+
+
+
+
+from django.db import models
+from .models import ESGReportBatch
+
+class CorporateBulkESGReports(models.Model):
     # Report Type Choices
     REPORT_TYPE_CHOICES = [
         ('Sustainability', 'Sustainability Report'),
@@ -215,32 +234,36 @@ class ESGReport(models.Model):
         ('Other', 'Other'),
     ]
 
-
-
-    # Fields
+    # Fields for the dynamic attributes of each report in the batch
     report_file = models.FileField(upload_to='corporate_reports/')
-    document_title = models.CharField(max_length=255)
+    document_title = models.CharField(max_length=255, unique=True)
     
-    organization_name = models.ForeignKey(ESGCompany, on_delete=models.CASCADE)
-    
-    industry_sector = models.CharField(max_length=255, choices=SECTOR_CHOICES)
-    organization_type = models.CharField(max_length=255, choices=ORGANIZATION_TYPE_CHOICES)
-    country_region = models.CharField(max_length=50, choices=REGION_CHOICES)
-
+    # Dynamic fields for each report
     reporting_year = models.IntegerField(choices=[(year, year) for year in range(2019, 2026)], default=2025)
-
-    reporting_period = models.CharField(max_length=100, choices=[('Annual', 'Annual Report'), ('Quarterly', 'Quarterly Report'), ('Periodic', 'Periodic Updates')])
-
+    reporting_period = models.CharField(max_length=50, choices=[('Annual', 'Annual Report'), 
+                                                                ('Quarterly', 'Quarterly Report'), 
+                                                                ('Periodic', 'Periodic Updates')])
     standards_applied = models.TextField()  # Can be a list or free text about which ESG standards are applied
-    report_type = models.CharField(max_length=100, choices=REPORT_TYPE_CHOICES, default='Annual')
+    report_type = models.CharField(max_length=50, choices=REPORT_TYPE_CHOICES, default='Annual')
 
+    # Peer Group and Confidentiality
     is_peer_report = models.BooleanField(default=False)
     peer_group_name = models.CharField(max_length=255, blank=True, null=True)
-
     is_confidential = models.BooleanField(default=False)
+    
+    # Relationship to the ESGReportBatch for shared fields
+    batch = models.ForeignKey(ESGReportBatch, on_delete=models.CASCADE, related_name="reports")
+    
+    # Tracking
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.document_title} - {self.organization_name}"
+        return f"{self.document_title} - {self.reporting_year} ({self.report_type})"
+
+    class Meta:
+        unique_together = ('batch', 'document_title', 'reporting_year', 'report_type')
+
+
+
 
 

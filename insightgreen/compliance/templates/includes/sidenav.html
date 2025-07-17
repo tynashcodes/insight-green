@@ -44,10 +44,10 @@
 						<li class="nav-item nav-item-submenu">
 							<a href="#" class="nav-link">
 								<i class="ph-layout"></i>
-								<span>ESG Compliance Standards</span>
+								<span>ESG Compliance Reports</span>
 							</a>
 							<ul class="nav-group-sub collapse">
-								<li class="nav-item"><a href="{% url 'compliance_report_upload' %}" class="nav-link active">Upload Standards</a></li>
+								<li class="nav-item"><a href="{% url 'compliance_report_upload' %}" class="nav-link active">Upload Reports</a></li>
 								<li class="nav-item"><a href="{% url 'compliance_document_list' %}" class="nav-link">Report History</a></li>
 								<li class="nav-item"><a href="../../layout_3/full/index.html" class="nav-link">Processed Reports</a></li>
 								<li class="nav-item"><a href="../../layout_4/full/index.html" class="nav-link">Document Archive</a></li>
@@ -56,11 +56,11 @@
 						<li class="nav-item nav-item-submenu">
 							<a href="#" class="nav-link">
 								<i class="ph-layout"></i>
-								<span>ESG Corporate Reports</span>
+								<span>Organizational Reports</span>
 							</a>
 							<ul class="nav-group-sub collapse">
-								<li class="nav-item"><a href="{% url 'upload_corporate_report' %}" class="nav-link active">Upload Reports</a></li>
-								<li class="nav-item"><a href="{% url 'corporate_report_list' %}" class="nav-link">Uploaded Reports</a></li>
+								<li class="nav-item"><a href="{% url 'list_esg_report_batch' %}" class="nav-link">Add Corporate Report</a></li>
+								<li class="nav-item"><a href="{% url 'report_batch_list' %}" class="nav-link">Uploaded Reports</a></li>
 								<li class="nav-item"><a href="../../layout_3/full/index.html" class="nav-link">Processing Status</a></li>
 								<li class="nav-item"><a href="../../layout_4/full/index.html" class="nav-link">Report History</a></li>
 								<li class="nav-item"><a href="{% url 'upload_companies' %}" class="nav-link">Upload Companies</a></li>
@@ -73,9 +73,21 @@
 							</a>
 							<ul class="nav-group-sub collapse">
 								<li class="nav-item"><a href="index.html" class="nav-link active">Compliance Overview</a></li>
-								<li class="nav-item"><a href="../../layout_2/full/index.html" class="nav-link">Framework Scores</a></li>
-								<li class="nav-item"><a href="../../layout_3/full/index.html" class="nav-link">Score History</a></li>
-								<li class="nav-item"><a href="../../layout_4/full/index.html" class="nav-link">Missing Criteria</a></li>
+								<li class="nav-item"><a href="#" class="nav-link">Framework Scores</a></li>
+								<li class="nav-item"><a href="#" class="nav-link">Score History</a></li>
+								<li class="nav-item"><a href="#" class="nav-link">Missing Criteria</a></li>
+							</ul>
+						</li>
+						<li class="nav-item nav-item-submenu">
+							<a href="#" class="nav-link">
+								<i class="ph-swatches"></i>
+								<span>Peer Benchmarking</span>
+							</a>
+							<ul class="nav-group-sub collapse">
+								<li class="nav-item"><a href="{% url 'peer_benchmarking_overview' %}" class="nav-link active">Benchmark Overview</a></li>
+								<li class="nav-item"><a href="#" class="nav-link">Peer Scorecards</a></li>
+								<li class="nav-item"><a href="#" class="nav-link">Percentile & Gap Analysis</a></li>
+								<li class="nav-item"><a href="#" class="nav-link">Recommendations</a></li>
 							</ul>
 						</li>
 						<li class="nav-item nav-item-submenu">

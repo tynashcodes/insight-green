@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="content">
+
+
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-icon-start alert-dismissible fade show">
+                <span class="alert-icon bg-{{ message.tags }} text-white">
+                    <i class="ph-bell-ringing"></i>
+                </span>
+                <span class="fw-semibold">{{ message }}</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+
+
+<div class="row">
+
+
+        <!-- Document Preview -->
+        <div class="col-lg-12">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">List of ESG Report Batches</h5>
+        </div>
+        <div class="card-body">
+            <p class="text-muted">Currently uploaded ESG Report Batches.</p>
+            <br>
+            <!-- Button to create a new batch for a new company -->
+            <a href="{% url 'create_esg_report_batch' %}" class="btn btn-success mb-3">Add a New ESG Report Batch</a>
+
+            <div class="table-responsive">
+                <table class="table datatable-button-html5-columns">
+                    <thead>
+                      <tr>
+                        <th>Batch ID</th>
+                        <th>Organization Name</th>
+                        <th>Peer Group Name</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for batch in batches %}
+                        <tr>
+                          <td>{{ batch.id }}</td>
+                          <td>{{ batch.organization_name }}</td>
+                          <td>{{ batch.peer_group_name }}</td>
+                          <td>
+                            <a href="{% url 'upload_bulk_reports' batch.id %}" class="btn btn-primary">Upload Reports</a>
+                          </td>
+                        </tr>
+                      {% empty %}
+                        <tr>
+                          <td colspan="4">No ESG Report Batches found.</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <!-- /Document Preview -->
+
+    </div>
+</div>
+
+
+{% endblock %}
+
+

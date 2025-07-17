@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">ESG Report Batch Table</h5>
+                </div>
+
+                <div class="card-body table-responsive">
+                    <table class="table datatable-button-html5-columns">
+                        <thead>
+                            <tr>
+                                <th>Document Title</th>
+                                <th>Organization Name</th>
+                                <th>Industry Sector</th>
+                                <th>Organization Type</th>
+                                <th>Country/Region</th>
+                                <th>Reporting Year</th>
+                                <th>Reporting Period</th>
+                                <th>Standards Applied</th>
+                                <th>Report Type</th>
+                                <th>Is Peer Report</th>
+                                <th>Peer Group Name</th>
+                                <th>Is Confidential</th>
+                                <th>Created At</th>
+                                <th>Report File</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for batch in report_batches %}
+                                {% for report in batch.reports.all %}
+                                    <tr>
+                                        <td>{{ report.document_title }}</td>
+                                        <td>{{ batch.organization_name }}</td>
+                                        <td>{{ batch.industry_sector }}</td>
+                                        <td>{{ batch.organization_type }}</td>
+                                        <td>{{ batch.country_region }}</td>
+                                        <td>{{ report.reporting_year }}</td>
+                                        <td>{{ report.reporting_period }}</td>
+                                        <td>{{ report.standards_applied }}</td>
+                                        <td>{{ report.report_type }}</td>
+                                        <td>{% if report.is_peer_report %}Yes{% else %}No{% endif %}</td>
+                                        <td>{{ report.peer_group_name }}</td>
+                                        <td>{% if report.is_confidential %}Yes{% else %}No{% endif %}</td>
+                                        <td>{{ report.created_at }}</td>
+                                        <td>
+                                            {% if report.report_file %}
+                                                <a href="{{ report.report_file.url }}" target="_blank">View Report</a>
+                                            {% else %}
+                                                No File
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% empty %}
+                                <tr>
+                                    <td colspan="14" class="text-center">No Reports Available</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

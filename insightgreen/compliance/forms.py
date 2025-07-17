@@ -137,12 +137,37 @@ class CompanyCSVUploadForm(forms.Form):
 
 
 
+
+
 from django import forms
-from .models import ESGCompany, ESGReport  # ✅ Make sure ESGReport is imported!
+from .models import ESGReportBatch, ESGCompany
 
-class ESGReportForm(forms.ModelForm):
+class ESGReportBatchForm(forms.ModelForm):
+    class Meta:
+        model = ESGReportBatch
+        fields = ['organization_name', 'industry_sector', 'country_region', 'organization_type', 'peer_group_name']
 
-    # Compliance Framework Choices
+    def __init__(self, *args, **kwargs):
+        super(ESGReportBatchForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'  # Add Bootstrap form-control class
+
+    def clean_organization_name(self):
+        organization_name = self.cleaned_data.get('organization_name')
+        if ESGReportBatch.objects.filter(organization_name=organization_name).exists():
+            raise forms.ValidationError("This organization already has a batch created.")
+        return organization_name
+
+
+
+
+
+
+from django import forms
+from django.core.exceptions import ValidationError
+from .models import CorporateBulkESGReports
+
+class CorporateBulkESGReportsForm(forms.ModelForm):
     COMPLIANCE_CHOICES = [
         ('GRI', 'GRI (Global Reporting Initiative)'),
         ('TCFD', 'TCFD (Task Force on Climate-related Financial Disclosures)'),
@@ -159,39 +184,68 @@ class ESGReportForm(forms.ModelForm):
         ('EU Taxonomy', 'EU Taxonomy Regulation'),
         ('UN SDGs', 'UN Sustainable Development Goals (SDGs)'),
     ]
+    
+    BOOLEAN_CHOICES = [
+        (True, 'Yes'),
+        (False, 'No'),
+    ]
 
-
-    organization_name = forms.ModelChoiceField(
-        queryset=ESGCompany.objects.all(),
-        to_field_name='company_name',
-        widget=forms.Select(attrs={'class': 'form-select'}),
-        required=True,
-        empty_label="Select a company"
-    )
-
-    # Multiselect Fields
+    # Dynamically created 'standards_applied' as a MultipleChoiceField
     standards_applied = forms.MultipleChoiceField(
         choices=COMPLIANCE_CHOICES,
         widget=forms.SelectMultiple(attrs={'class': 'form-control multiselect'}),
         required=True
     )
 
+    # Update to ensure 'is_peer_report' and 'is_confidential' use dropdowns
+    is_peer_report = forms.ChoiceField(
+        choices=BOOLEAN_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        required=True
+    )
+    
+    is_confidential = forms.ChoiceField(
+        choices=BOOLEAN_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        required=True
+    )
+
     class Meta:
-        model = ESGReport
+        model = CorporateBulkESGReports
         fields = [
-            'report_file',
             'document_title',
-            'organization_name',
-            'industry_sector',
-            'organization_type',
-            'country_region',
+            'report_file',
             'reporting_year',
             'reporting_period',
-            'report_type',
             'standards_applied',
+            'report_type',
             'is_peer_report',
             'peer_group_name',
             'is_confidential',
         ]
 
+    def __init__(self, *args, **kwargs):
+        super(CorporateBulkESGReportsForm, self).__init__(*args, **kwargs)
+        # Add Bootstrap class to each field except 'standards_applied'
+        for field in self.fields:
+            if field != 'standards_applied':  # Check field name directly
+                self.fields[field].widget.attrs['class'] = 'form-control'
+
+    # Custom validation for unique document title
+    def clean_document_title(self):
+        document_title = self.cleaned_data['document_title']
+        if CorporateBulkESGReports.objects.filter(document_title=document_title).exists():
+            raise ValidationError("This document title already exists. Please choose a different title.")
+        return document_title
+
+
+    def clean(self):
+        cleaned_data = super().clean()
+        is_peer_report = cleaned_data.get('is_peer_report')
+        peer_group_name = cleaned_data.get('peer_group_name')
+
+        if is_peer_report == 'Yes' and not peer_group_name:
+            self.add_error('peer_group_name', 'Peer Group Name is required when "Is Peer Report" is Yes.')
+        
+        return cleaned_data
 
