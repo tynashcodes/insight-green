@@ -237,29 +237,6 @@ Text:
 
 
 
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from .forms import ESGReportForm
-
-def upload_corporate_report(request):
-    if request.method == 'POST':
-        form = ESGReportForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "ESG Corporate Report uploaded successfully.")
-            return redirect('upload_corporate_report')  # Or wherever you want
-        else:
-            messages.error(request, "Please correct the errors below.")
-    else:
-        form = ESGReportForm()
-
-    return render(request, 'compliance/upload_corporate_report.html', {
-        'form': form
-    })
-
-
-
-
 
 
 
@@ -461,13 +438,13 @@ import os
 import fitz  # PyMuPDF
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
-from .models import ESGReport, ExtractedReportPage
+from .models import ExtractedReportPage
 import re
 from django.conf import settings
 
 
 def extract_full_text_using_gemini_flash(request, report_id):
-    report = get_object_or_404(ESGReport, id=report_id)
+    report = get_object_or_404(CorporateBulkESGReports, id=report_id)
     path = report.report_file.path
     ext = os.path.splitext(path)[1].lower()
 
@@ -522,7 +499,7 @@ def extract_full_text_using_gemini_flash(request, report_id):
 
 
 from django.shortcuts import render, get_object_or_404
-from .models import ESGReport, ESGComplianceScore, ESGComplianceSummary
+from .models import ESGComplianceScore, ESGComplianceSummary
 from .services import evaluate_report_against_framework
 
 def compliance_analysis_view(request):

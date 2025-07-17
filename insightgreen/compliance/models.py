@@ -285,7 +285,7 @@ class CorporateBulkESGReports(models.Model):
 
 
 class ExtractedReportPage(models.Model):
-    report = models.ForeignKey(ESGReport, on_delete=models.CASCADE, related_name='extracted_pages')
+    report = models.ForeignKey(CorporateBulkESGReports, on_delete=models.CASCADE, related_name='extracted_pages')
     page_number = models.PositiveIntegerField()
     page_text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
