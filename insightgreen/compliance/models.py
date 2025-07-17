@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 
 # Create your models here.
@@ -130,10 +131,25 @@ class ESGCompany(models.Model):
         
 class ESGComplianceFramework(models.Model):
     document = models.ForeignKey(ESGComplianceReport, on_delete=models.CASCADE, related_name='disclosures')
-    standard_area = models.CharField(max_length=255)
-    disclosure_title = models.CharField(max_length=255)  # e.g., "Disclosure 3-3 Management of material topics"
+    standard_area = models.CharField(max_length=255, null=True, blank=True)
+    sub_standard_area = models.TextField()  # Optional, for more detailed categorization
+    disclosure_title = models.CharField(max_length=255, null=True, blank=True)  # e.g., "Disclosure 3-3 Management of material topics"
     requirements = models.TextField()  # Store the requirements section as text
-    recommendations = models.TextField(blank=True)  # Store the recommendations section as text, if applicable
+    recommendations = models.TextField()  # Store the recommendations section as text, if applicable
+    page_number = models.PositiveIntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.disclosure_title
+    
+
+class ESGComplianceFrameworkTest(models.Model):
+    document = models.ForeignKey(ESGComplianceReport, on_delete=models.CASCADE, related_name='disclosures_test')
+    standard_area = models.CharField(max_length=255, null=True, blank=True)
+    sub_standard_area = models.TextField(null=True, blank=True)  # Optional, for more detailed categorization
+    disclosure_title = models.CharField(max_length=255, null=True, blank=True)  # e.g., "Disclosure 3-3 Management of material topics"
+    requirements = models.TextField()  # Store the requirements section as text
+    recommendations = models.TextField()  # Store the recommendations section as text, if applicable
     page_number = models.PositiveIntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -267,3 +283,70 @@ class CorporateBulkESGReports(models.Model):
 
 
 
+
+class ExtractedReportPage(models.Model):
+    report = models.ForeignKey(ESGReport, on_delete=models.CASCADE, related_name='extracted_pages')
+    page_number = models.PositiveIntegerField()
+    page_text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('report', 'page_number')  # Prevent duplicate pages
+
+    def __str__(self):
+        return f"Page {self.page_number} of {self.report.document_title}"
+
+class ESGComplianceStandard(models.Model):
+    standard_code = models.CharField(max_length=50, unique=True)
+    standard_name = models.CharField(max_length=255, unique=True)
+    description = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.standard_name
+    
+
+class Evaluation(models.Model):
+    company = models.ForeignKey(ESGCompany, on_delete=models.CASCADE, related_name='evaluations')
+    standard = models.ForeignKey(ESGComplianceStandard, on_delete=models.CASCADE, related_name='standard_evaluation')
+    status = models.CharField(max_length=50, choices=[('Pending', 'Pending'), ('Completed', 'Completed')], default='Pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Evaluation for {self.company.name} - {self.standard.name}"
+    
+
+
+class ESGComplianceScore(models.Model):
+    compliance_item = models.ForeignKey('ESGComplianceFramework', on_delete=models.CASCADE, related_name='scores')
+    page = models.ForeignKey('ExtractedReportPage', on_delete=models.SET_NULL, null=True, blank=True)
+    evaluation = models.ForeignKey(Evaluation, on_delete=models.CASCADE, related_name='scores', null=True, blank=True)
+    score = models.DecimalField(max_digits=2, decimal_places=1)
+    feedback = models.TextField()
+    recommendation = models.TextField(null=True, blank=True)
+    paragraph = models.TextField(null=True, blank=True)
+    matched_text_excerpt = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Score {self.score} for {self.compliance_item} on {self.report}"
+
+
+class ESGComplianceSummary(models.Model):
+    evaluation = models.ForeignKey(Evaluation, on_delete=models.CASCADE, related_name='summary_scores', null=True, blank=True)
+    total_score = models.DecimalField(max_digits=5, decimal_places=2)
+    total_possible = models.IntegerField()
+    compliance_percentage = models.DecimalField(max_digits=5, decimal_places=2)
+    generated_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.report.document_title} – {self.compliance_percentage}%"
+
+    
+    
+    
+
+
+    
+    

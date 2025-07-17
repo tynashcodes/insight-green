@@ -72,22 +72,10 @@
 								<span>Compliance Scores</span>
 							</a>
 							<ul class="nav-group-sub collapse">
-								<li class="nav-item"><a href="index.html" class="nav-link active">Compliance Overview</a></li>
-								<li class="nav-item"><a href="#" class="nav-link">Framework Scores</a></li>
-								<li class="nav-item"><a href="#" class="nav-link">Score History</a></li>
-								<li class="nav-item"><a href="#" class="nav-link">Missing Criteria</a></li>
-							</ul>
-						</li>
-						<li class="nav-item nav-item-submenu">
-							<a href="#" class="nav-link">
-								<i class="ph-swatches"></i>
-								<span>Peer Benchmarking</span>
-							</a>
-							<ul class="nav-group-sub collapse">
-								<li class="nav-item"><a href="{% url 'peer_benchmarking_overview' %}" class="nav-link active">Benchmark Overview</a></li>
-								<li class="nav-item"><a href="#" class="nav-link">Peer Scorecards</a></li>
-								<li class="nav-item"><a href="#" class="nav-link">Percentile & Gap Analysis</a></li>
-								<li class="nav-item"><a href="#" class="nav-link">Recommendations</a></li>
+								<li class="nav-item"><a href="javascript:void()" class="nav-link active">Compliance Overview</a></li>
+								<li class="nav-item"><a href="{% url "evaluation_list" %}" class="nav-link">Framework Evaluation</a></li>
+								<li class="nav-item"><a href="{% url "scoring_history" %}" class="nav-link">Score History</a></li>
+								<li class="nav-item"><a href="javascript:void()" class="nav-link">Missing Criteria</a></li>
 							</ul>
 						</li>
 						<li class="nav-item nav-item-submenu">
@@ -108,7 +96,7 @@
 								<span>Frameworks & Standards</span>
 							</a>
 							<ul class="nav-group-sub collapse">
-								<li class="nav-item"><a href="../seed/layout_static.html" class="nav-link">Regulatory Standards</a></li>
+								<li class="nav-item"><a href="{% url "compliance_standards" %}" class="nav-link">Listed Standards</a></li>
 								<li class="nav-item"><a href="../seed/layout_no_header.html" class="nav-link">Mapped Criteria</a></li>
 								<li class="nav-item"><a href="../seed/layout_no_footer.html" class="nav-link">Coverage Check</a></li>
 								<li class="nav-item"><a href="../seed/layout_fixed_header.html" class="nav-link">Updates & Changes</a></li>

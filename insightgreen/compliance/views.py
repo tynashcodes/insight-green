@@ -1,11 +1,12 @@
 import json
 from django.contrib import messages
 from django.shortcuts import redirect, render
-from .models import ESGComplianceFramework, ESGComplianceReport
+from django.urls import reverse
+from .models import ESGComplianceFramework, ESGComplianceReport, ExtractedReportPage, Evaluation, ESGComplianceStandard
 
 import fitz  # PyMuPDF
 
-from .forms import CompanyCSVUploadForm, ESGComplianceReportForm, TestTableForm
+from .forms import CompanyCSVUploadForm, ESGComplianceReportForm, TestTableForm, EvaluationForm
 
 # Create your views here.
 def index(request):
@@ -127,66 +128,102 @@ def extract_text_from_pdf(request, id):
     try:
         with doc.report_file.open(mode='rb') as f:
             pdf = fitz.open(stream=f.read(), filetype="pdf")
-
             page_texts = []
             for i, page in enumerate(pdf, start=1):
                 raw_text = page.get_text()
                 cleaned = clean_pdf_text(raw_text)
                 page_texts.append(f"[Page {i}]\n{cleaned}")
-
             pdf.close()
 
         full_text = "\n\n".join(page_texts)
-        truncated_text = full_text[:1000000]  # Limit to 1 million characters
+        truncated_text = full_text[:1000000]
 
-        prompt = f"""
-You are analyzing a text extracted from a sustainability PDF (like GRI Standards).
+        # Determine which prompt to use
+        if "GRI" in doc.document_title:
+            prompt = f"""
+You are analyzing a text extracted from a sustainability PDF based on GRI Standards.
 
 Please extract all sections that:
 1. Start with a heading like "Disclosure X-X Title"
 2. Are followed by a REQUIREMENTS section — extract this fully
-3. If a RECOMMENDATIONS section normally comes after REQUIREMENTS, include it as well
+3. If a RECOMMENDATIONS section comes after REQUIREMENTS, include it as well
 4. Ignore any GUIDANCE sections
-5. Preserve any bullet points, roman numerals, and numbers exactly as they appear — do not reformat or summarize
-6. Include the page number for each disclosure (i.e., the page where the disclosure starts)
+5. Preserve bullet points, roman numerals, and numbers exactly as they appear
+6. Include the page number where each disclosure begins
 
 Format:
 [
   {{
     "disclosure": "Disclosure 3-1 Title",
-    "requirements": ["requirement 1", "requirement 2", "..."],
-    "recommendations": ["recommendation 1", "..."],  # optional
+    "requirements": ["..."],
+    "recommendations": ["..."],  # optional
     "page": 3
   }},
   ...
 ]
 
-Here is the extracted document:
-\"\"\" 
+Text:
+\"\"\"
 {truncated_text}
 \"\"\"
 """
+        elif "IFRS S1" in doc.document_title:
+            prompt = f"""
+You are analyzing text extracted from an IFRS S2 PDF focused on climate-related disclosures.
+Your task is to extract ESG compliance framework elements using the following instructions:
+
+1.  Identify and extract disclosures related to these four main pillars (standard areas): Governance, Strategy, Risk Management, Metrics and Targets.
+2.  Sub-standard areas are subheadings or thematic groupings under each standard area. For example: “Climate-related risks and opportunities” or “Business model and value chain” under Strategy.
+3.  The disclosure title should reflect the overarching section title (e.g., Strategy, Risk Management).
+4.  Requirements:
+    - Extract each requirement as a separate entry.
+    - Any item under a disclosure or sub-standard area that is marked with a bullet (•), number (1., 2.), letter (a), (b), or roman numeral (i), (ii) must be treated as a separate and standalone requirement row.
+    - Do not combine multiple subpoints into a single requirement, even if they belong to the same paragraph or section.
+    - Include bold text and numbered/bulleted text beneath headings as part of the requirement content.
+    - There are no “Recommendations” in IFRS S2, so omit any mention of them.
+5.  Maintain the structure and phrasing of the original content — do not paraphrase. Preserve any formatting such as bullets or indentation exactly.
+6.  For each requirement, record the page number where it appears.
+
+Output format (note: each requirement should be a separate object)
+Format:
+[
+  {{
+    "disclosure": "Strategy",
+    "requirements": ["..."],
+    "sub_standard_area": "",
+    "page": 4
+  }},
+  ...
+]
+
+Text:
+\"\"\"
+{truncated_text}
+\"\"\"
+"""
+        else:
+            return JsonResponse({'error': 'Unknown compliance framework. GRI or IFRS S1 expected.'}, status=400)
 
         model = genai.GenerativeModel("gemini-2.0-flash")
-        response = model.generate_content(prompt)
+        response = model.generate_content(prompt.strip())
         result = response.text.strip()
 
-        # Try to load as JSON (clean any extra markdown if needed)
         json_str = result.strip('```json').strip('```')
         data = json.loads(json_str)
 
         # Save to DB
-        for idx, item in enumerate(data):
-            disclosure = ESGComplianceFramework.objects.create(
+        for item in data:
+            ESGComplianceFramework.objects.create(
                 document=doc,
                 disclosure_title=item.get("disclosure"),
                 page_number=item.get("page", 0),
                 requirements="\n".join(item.get("requirements", [])),
                 recommendations="\n".join(item.get("recommendations", [])) if "recommendations" in item else "",
+                sub_standard_area=item.get("sub_standard_area", "") if "sub_standard_area" in item else "",
                 standard_area=doc.document_title
             )
 
-        return JsonResponse({"message": "Disclosures and requirements saved successfully", "count": len(data)})
+        return JsonResponse({"message": "Disclosures saved", "count": len(data)})
 
     except Exception as e:
         return render(request, 'compliance/view_extracted_text.html', {
@@ -198,6 +235,27 @@ Here is the extracted document:
 
 
 
+
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .forms import ESGReportForm
+
+def upload_corporate_report(request):
+    if request.method == 'POST':
+        form = ESGReportForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "ESG Corporate Report uploaded successfully.")
+            return redirect('upload_corporate_report')  # Or wherever you want
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = ESGReportForm()
+
+    return render(request, 'compliance/upload_corporate_report.html', {
+        'form': form
+    })
 
 
 
@@ -399,6 +457,175 @@ def list_corporate_report_batch(request):
 
 
 
+import os
+import fitz  # PyMuPDF
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+from .models import ESGReport, ExtractedReportPage
+import re
+from django.conf import settings
+
+
+def extract_full_text_using_gemini_flash(request, report_id):
+    report = get_object_or_404(ESGReport, id=report_id)
+    path = report.report_file.path
+    ext = os.path.splitext(path)[1].lower()
+
+    if ext != ".pdf":
+        messages.error(request, f"Unsupported file format: {ext}")
+        return redirect('report_detail', report_id=report.id)
+
+    try:
+        # ✅ Configure Gemini
+        genai.configure(api_key="AIzaSyA5hzMuaEzsJC_mE5L4IorTi_RWcu6PSpQ")  # Replace with secure access in production
+        model = genai.GenerativeModel("models/gemini-2.0-flash")
+
+        # ✅ Extract text from PDF
+        doc = fitz.open(path)
+        full_raw_text = "\n\n".join([page.get_text("text") for page in doc]).strip()
+
+        # ✅ Define chunking function
+        def chunk_text(text, max_chars=100_000):
+            for i in range(0, len(text), max_chars):
+                yield text[i:i + max_chars]
+
+        cleaned_chunks = []
+        prompt = (
+            "Carefully read and clean the following ESG report text. "
+            "Fix broken line breaks and merge lines that are part of the same sentence or paragraph. "
+            "Preserve paragraph structure and logical flow. Do not summarize, skip, or rephrase. "
+            "Maintain original content faithfully, making it readable and continuous where it was broken."
+        )
+
+        # ✅ Process each chunk through Gemini
+        for idx, chunk in enumerate(chunk_text(full_raw_text)):
+            print(f"Sending chunk {idx + 1} to Gemini (length: {len(chunk)})")
+            response = model.generate_content([prompt, chunk])
+            cleaned = response.text.strip()
+            cleaned_chunks.append(cleaned)
+
+        full_cleaned_text = "\n\n".join(cleaned_chunks).strip()
+
+        # ✅ Save result to DB
+        ExtractedReportPage.objects.update_or_create(
+            report=report,
+            page_number=1,
+            defaults={"page_text": full_cleaned_text}
+        )
+
+        messages.success(request, "Text extracted and cleaned using Gemini 2.0 Flash successfully.")
+
+    except Exception as e:
+        messages.error(request, f"Gemini extraction error: {e}")
+
+    return redirect('report_detail', report_id=report.id)
+
+
+from django.shortcuts import render, get_object_or_404
+from .models import ESGReport, ESGComplianceScore, ESGComplianceSummary
+from .services import evaluate_report_against_framework
+
+def compliance_analysis_view(request):
+    pages = ExtractedReportPage.objects.all().select_related("report")
+    scores = ESGComplianceScore.objects.all().select_related("page", "compliance_item")
+    summary = ESGComplianceSummary.objects.last()  # latest summary
+
+    return render(request, 'compliance/compliance_analysis.html', {
+        'pages': pages,
+        'scores': scores,
+        'summary': summary,
+    })
+
+from django.views.decorators.http import require_POST
+
+@require_POST
+def ajax_run_compliance(request, evaluation_id):
+    try:
+        evaluation = Evaluation.objects.get(id=evaluation_id)
+        
+        summary = evaluate_report_against_framework(evaluation)
+
+        if summary is None:
+            return JsonResponse({"message": "Evaluation completed, but no scores were generated."}, status=400)
+
+        redirect_url = reverse('evaluation_list')
+
+        return JsonResponse({
+            "message": "Evaluation completed successfully.",
+            "summary": {
+                "compliance_percentage": float(summary.compliance_percentage),
+                "total_score": float(summary.total_score),
+                "total_possible": summary.total_possible,
+            },
+            "redirect_url": redirect_url
+        })
+    
+    except Exception as e:
+        return JsonResponse({"message": f"Error: {str(e)}"}, status=500)
+
+
+
+def compliance_summary_detail(request, summary_id):
+    summary = get_object_or_404(ESGComplianceSummary, id=summary_id)
+    return render(request, 'compliance/summary_detail.html', {'summary': summary})
+
+
+
+def evaluation_list(request):
+    if request.method == 'POST':
+        form = EvaluationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Evaluation created successfully!')
+            
+    else:
+        form = EvaluationForm()
+    
+    evaluations = Evaluation.objects.all().select_related('company', 'standard')
+    return render(request, 'compliance/evaluation_list.html', {'form': form, 'evaluations': evaluations})
+
+
+def loading(request):
+    """
+    Render a loading page.
+    """
+    return render(request, 'compliance/loading.html')
+
+
+def evaluation_scoring_findings(request, evaluation_id):
+    evaluation = get_object_or_404(Evaluation, id=evaluation_id)
+    scores = ESGComplianceScore.objects.filter(evaluation=evaluation).select_related('page', 'compliance_item')
+    summary = ESGComplianceSummary.objects.filter(evaluation_id=evaluation).first()
+    
+    return render(request, 'compliance/evaluation_scoring_findings.html', {
+        'evaluation': evaluation,
+        'scores': scores,
+        'summary': summary
+    })
+    
+def scoring_history(request):
+    """
+    Render the scoring history page.
+    """
+    summaries = ESGComplianceSummary.objects.all().order_by('-generated_at')
+    return render(request, 'compliance/scoring_history.html', {'summaries': summaries})
+
+
+def extracted_framework_list(request):
+    """
+    Render a list of extracted framework items.
+    """
+    framework_items = ESGComplianceFramework.objects.all().select_related('document')
+    return render(request, 'compliance/extracted_framework_list.html', {'framework_items': framework_items})
+
+
+def compliance_standards(request):
+    """
+    Render a list of compliance standards.
+    """
+    standards = ESGComplianceStandard.objects.all()
+    compliance_framework = ESGComplianceFramework.objects.all().select_related()
+    return render(request, 'compliance/compliance_standards.html', {'standards': standards})
 
 def peer_benchmarking_overview(request):
     return render(request, 'benchmarking/overview.html')

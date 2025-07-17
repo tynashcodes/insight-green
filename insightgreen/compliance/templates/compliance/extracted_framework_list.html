@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+
+<!-- Content area -->
+<div class="content">
+    <div class="card">
+        <div class="card-header d-sm-flex align-items-sm-center py-sm-0">
+            <h5 class="py-sm-2 my-sm-1">Extracted Framework List</h5>
+        </div>
+
+        <table class="table datatable-button-html5-columns">
+            <thead>
+                <tr>
+                    <th>Company Name</th>
+                    <th>Standard Name</th>
+                    <th>Scored Points</th>
+                    <th>Total Points</th>
+                    <th>Aggregate Score</th>
+                    <th>Evaluated On</th>
+                    <th>Manage Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for framework_item in framework_items %}
+                <tr>
+                    <td>{{ framework_item.id }}</td>
+                    <td>
+                        <div class="dropdown">
+                            <a href="javascript:void()" class="text-body" data-bs-toggle="dropdown">
+                                <i class="ph-list"></i>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="manageLocationDropdown">
+                                <a href="javascript:void(0);" class="dropdown-item">
+                                    <i class="ph-play-circle me-2 text-primary"></i> Run ESG Compliance Evaluation
+                                </a>
+
+                                <a href="" class="dropdown-item" target="_blank">
+                                    <i class="ph-book-open me-2 text-pink"></i> Findings Per Standard
+                                </a>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- /column selectors -->
+
+{% endblock %}
