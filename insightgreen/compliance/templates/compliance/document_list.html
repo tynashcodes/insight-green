@@ -14,7 +14,7 @@
 							DataTables has the option of being able to <code>save the state</code> of a table: its paging position, ordering state etc., so that is can be restored when the user reloads a page, or comes back to the page after visiting a sub-page. This state saving ability is enabled by the <code>stateSave</code> option. The <code>duration</code> for which the saved state is valid can be set using the <code>stateDuration</code> initialisation parameter (2 hours by default).
 						</div>
 
-						<table class="table datatable-save-state">
+						<table class="table datatable-button-html5-columns">
 							<thead>
 								<tr>
 									<th>Document Title</th>
@@ -34,7 +34,20 @@
 									<td>{{ file.reporting_year }}</td>
 									<td>{{ file.report_sector }}</td>
 									<td>
-										<a href="{% url 'extract_text' file.id %}" class="btn btn-primary btn-icon rounded-pill" aria-label="Extract text"><i class="ph-navigation-arrow"></i></a>
+										<div class="dropdown">
+											<a href="javascript:void()" class="text-body" data-bs-toggle="dropdown">
+												<i class="ph-list"></i>
+											</a>
+											<ul class="dropdown-menu" aria-labelledby="manageLocationDropdown">
+												<a href="{% url 'extract_text' file.id %}" class="dropdown-item">
+													<i class="ph-navigation-arrow me-2 text-primary"></i> Extract Framework Data
+												</a>
+
+												<a href="" class="dropdown-item" target="_blank">
+													<i class="ph-book-open me-2 text-pink"></i> Findings Per Standard
+												</a>
+											</ul>
+										</div>
 									</td>
 								</tr>
                                 {% endfor %}

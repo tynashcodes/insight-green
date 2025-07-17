@@ -1,0 +1,30 @@
+<button id="evaluate-btn">Run ESG Compliance Evaluation</button>
+<div id="evaluation-result"></div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $('#evaluate-btn').on('click', function() {
+    $('#evaluate-btn').prop('disabled', true).text('Analyzing...');
+    $('#evaluation-result').html("Processing...");
+
+    $.ajax({
+      url: "{% url 'ajax_run_compliance' %}",
+      method: "POST",
+      headers: { "X-CSRFToken": "{{ csrf_token }}" },
+      success: function(data) {
+        $('#evaluation-result').html(`
+          <p><strong>${data.message}</strong></p>
+          <p><strong>Score:</strong> ${data.summary.total_score} / ${data.summary.total_possible}</p>
+          <p><strong>Compliance:</strong> ${data.summary.compliance_percentage.toFixed(2)}%</p>
+        `);
+        $('#evaluate-btn').prop('disabled', false).text('Run ESG Compliance Evaluation');
+        // Redirect to summary page
+        window.location.href = data.redirect_url;
+      },
+      error: function() {
+        $('#evaluation-result').html("<p style='color:red;'>Error running evaluation.</p>");
+        $('#evaluate-btn').prop('disabled', false).text('Run ESG Compliance Evaluation');
+      }
+    });
+  });
+</script>

@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+
+<!-- Content area -->
+<div class="content">
+<div id="evaluation-result" class="mt-3"></div>
+<br>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card">
+        <div class="card-header d-sm-flex align-items-sm-center py-sm-0">
+            <h5 class="py-sm-2 my-sm-1">Manage Records</h5>
+            <div class="mt-2 mt-sm-0 ms-sm-auto">
+                <button type="button" class="btn btn-yellow" data-bs-toggle="modal" data-bs-target="#modal_form_grade"><i class="ph-note-pencil me-2"></i>Initiate New Evaluation</button>
+            </div>
+        </div>
+
+        <table class="table datatable-button-html5-columns">
+            <thead>
+                <tr>
+                    <th>Company Name</th>
+                    <th>Standard Name</th>
+                    <th>Evaluation Status</th>
+                    <th>Evaluation Date</th>
+                    <th>Manage Evaluation</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for evaluation in evaluations %}
+                <tr>
+                    <td>{{ evaluation.company }}</td>
+                    <td>{{ evaluation.standard.standard_code }}</td>
+                    <td>
+                        {% if evaluation.status == "Pending" %}
+                        <span class="badge bg-danger">Pending</span>
+                        {% else %}
+                        <span class="badge bg-success">Completed</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ evaluation.created_at }}</td>
+                    <td>
+                        <div class="dropdown">
+                            <a href="javascript:void()" class="text-body" data-bs-toggle="dropdown">
+                                <i class="ph-list"></i>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="manageLocationDropdown">
+                                <a href="javascript:void(0);" class="dropdown-item run-evaluation-btn" data-evaluation-id="{{ evaluation.id }}">
+                                    <i class="ph-play-circle me-2 text-primary"></i> Run ESG Compliance Evaluation
+                                </a>
+
+                                <a href="{% url "evaluation_scoring_findings" evaluation.id %}" class="dropdown-item" target="_blank">
+                                    <i class="ph-book-open me-2 text-pink"></i> Findings Per Standard
+                                </a>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- /column selectors -->
+
+<!-- Create New Evaluation Modal -->
+<div id="modal_form_grade" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create New Evaluation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <div class="row">
+                            <div class="mb-3 col-sm-12">
+                                <label class="form-label">Company</label>
+                                {{ form.company}}
+                            </div>
+                            
+                            <div class="mb-3 col-sm-12">
+                                <label class="form-label">Standard</label>
+                                {{ form.standard }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <button type="submit" name="create_grade" class="btn btn-block btn-dark">Make Evaluation</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /Create New Evaluation Modal -->
+
+<script>
+    $(document).on('click', '.run-evaluation-btn', function(e) {
+        e.preventDefault();
+        const evaluationId = $(this).data('evaluation-id');
+        const $btn = $(this);
+
+        // Disable button and show loading state
+        $btn
+            .addClass('disabled')
+            .html('<i class="ph-circle-notch ph-spin me-2"></i>Analyzing...');
+
+        // Show loading progress UI
+        $('#evaluation-result').html(`
+            <div>
+                <p><strong>Running ESG Compliance Evaluation, please wait....</strong></p>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                         role="progressbar" 
+                         style="width: 100%">
+                    </div>
+                </div>
+            </div>
+        `);
+
+        // Make AJAX request
+        $.ajax({
+            url: `/compliance/ajax/run/${evaluationId}/`,
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            success: function(data) {
+                if (data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                } else {
+                    $('#evaluation-result').html(`
+                        <p><strong>${data.message}</strong></p>
+                        <p><strong>Score:</strong> ${data.summary.total_score} / ${data.summary.total_possible}</p>
+                        <p><strong>Compliance:</strong> ${data.summary.compliance_percentage.toFixed(2)}%</p>
+                    `);
+                }
+                
+                // Reset button state
+                $btn
+                    .removeClass('disabled')
+                    .html('<i class="ph-play-circle me-2 text-primary"></i>Run ESG Compliance Evaluation');
+            },
+            error: function(xhr) {
+                $('#evaluation-result').html(`
+                    <p class="text-danger">Error running evaluation: ${xhr.responseText}</p>
+                `);
+                
+                // Reset button state on error
+                $btn
+                    .removeClass('disabled')
+                    .html('<i class="ph-play-circle me-2 text-primary"></i>Run ESG Compliance Evaluation');
+            }
+        });
+    });
+</script>
+
+{% endblock %}

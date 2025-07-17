@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- Content area -->
+<div class="content">
+
+    <!-- Accordion markup -->
+					<div class="card">
+						<div class="card-header">
+							<h5 class="mb-0">Detailed Findings Per Standard</h5>
+						</div>
+
+						<div class="card-body">
+							<p class="mb-3">One-click access to detailed compliance findings with evidence extracted directly from your ESG reports, allowing for precise identication of gaps and strengths.</p>
+
+							<div class="accordion">
+								<div class="accordion-item">
+									<h2 class="accordion-header">
+										<button class="accordion-button fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapsed_item1">
+											{{ evaluation.standard.standard_code }} - {{ summary.compliance_percentage }}%
+										</button>
+									</h2>
+									<div id="collapsed_item1" class="accordion-collapse collapse">
+										<div class="accordion-body">
+
+                                            {% for score in scores %}
+
+                                            {% if score.score == 1.0 %}
+                                            <p><span class="fw-bold">{{ score.compliance_item.disclosure_title }}:</span> {{ score.compliance_item.sub_standard_area }}</p>
+											<div class="alert alert-success alert-dismissible fade show">
+												<i class="ph-check-circle me-2"></i>
+												<i>{{ score.feedback }}</i>
+											</div>
+
+											<div class="fw-bold border-bottom pb-2 mb-3"></div>
+
+                                            {% elif score.score == 0.5 %}
+                                            <p><span class="fw-bold">{{ score.compliance_item.disclosure_title }}:</span> {{ score.compliance_item.sub_standard_area }}</p>
+											<div class="alert alert-warning alert-dismissible fade show">
+												<i class="ph-warning me-2"></i>
+												<i>{{ score.feedback }}</i>
+											</div>
+
+											<div class="fw-bold border-bottom pb-2 mb-3"></div>
+                                            {% else %}
+                                            <p><span class="fw-bold">{{ score.compliance_item.disclosure_title }}:</span> {{ score.compliance_item.sub_standard_area }}</p>
+											<div class="alert alert-danger alert-dismissible fade show">
+												<i class="ph-x me-2"></i>
+												<i>{{ score.feedback }}</i>
+											</div>
+
+											<div class="fw-bold border-bottom pb-2 mb-3"></div>
+                                            {% endif %}
+
+                                            {% endfor %}
+										</div>
+									</div>
+								</div>
+
+
+                                
+							</div>
+						</div>
+					</div>
+					<!-- /accordion markup -->
+
+</div>
+<!-- /column selectors -->
+
+{% endblock %}

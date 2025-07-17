@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="content">
+    <div class="row">
+        <!-- ESG Compliance Documents Table -->
+         <!-- State saving -->
+					<div class="card">
+						<div class="card-header">
+							<h5 class="mb-0">Compliance Documents</h5>
+						</div>
+
+						<div class="card-body">
+							DataTables has the option of being able to <code>save the state</code> of a table: its paging position, ordering state etc., so that is can be restored when the user reloads a page, or comes back to the page after visiting a sub-page. This state saving ability is enabled by the <code>stateSave</code> option. The <code>duration</code> for which the saved state is valid can be set using the <code>stateDuration</code> initialisation parameter (2 hours by default).
+						</div>
+
+						<table class="table datatable-button-html5-columns">
+							<thead>
+								<tr>
+									<th>Standard Title</th>
+									<th>Standard Name</th>
+									<th>Description</th>
+									<th>Created At</th>
+									<th>Manage</th>
+								</tr>
+							</thead>
+							<tbody>
+                                {% for standard in standards %}
+								<tr>
+									<td>{{ standard.standard_code }}</td>
+									<td>{{ standard.standard_name }}</td>
+									<td>{{ standard.description }}</td>
+									<td>{{ standard.created_at }}</td>
+									<td>
+										<div class="dropdown">
+											<a href="javascript:void()" class="text-body" data-bs-toggle="dropdown">
+												<i class="ph-list"></i>
+											</a>
+											<ul class="dropdown-menu" aria-labelledby="manageLocationDropdown">
+												<a href="javascript:void()" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#standard{{ standard.id }}_modal">
+													<i class="ph-book-open me-2 text-pink"></i> Extracted Standard Data
+												</a>
+											</ul>
+										</div>
+									</td>
+								</tr>
+
+<!-- Compliance Standard Details Modal -->
+<div id="standard{{ standard.id }}_modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create New Evaluation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+                <div class="modal-body">
+
+                </div>
+        </div>
+    </div>
+</div>
+<!-- /Compliance Standard Details Modal -->
+                                {% endfor %}
+							</tbody>
+						</table>
+					</div>
+					<!-- /state saving -->
+
+<!-- /ESG Compliance Documents Table -->
+
+
+    </div>
+</div>
+{% endblock %}

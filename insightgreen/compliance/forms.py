@@ -1,5 +1,5 @@
 from django import forms
-from .models import ESGComplianceReport
+from .models import ESGComplianceReport, Evaluation, ESGCompany, ESGComplianceStandard
 
 class ESGComplianceReportForm(forms.ModelForm):
     # Compliance Framework Choices
@@ -195,3 +195,29 @@ class ESGReportForm(forms.ModelForm):
         ]
 
 
+
+
+class EvaluationForm(forms.ModelForm):
+    company = forms.ModelChoiceField(
+        queryset=ESGCompany.objects.all(),
+        to_field_name='company_name',
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        required=True,
+        empty_label="---Select Company---"
+    )
+    
+    standard = forms.ModelChoiceField(
+        queryset=ESGComplianceStandard.objects.all(),
+        to_field_name='standard_code',
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        required=True,
+        empty_label="---Select Standard---"
+    )
+    
+    class Meta:
+        model = Evaluation
+        fields = ['company', 'standard']
+        widgets = {
+            'company': forms.Select(attrs={'class': 'form-select'}),
+            'standard': forms.Select(attrs={'class': 'form-select'}),
+        }

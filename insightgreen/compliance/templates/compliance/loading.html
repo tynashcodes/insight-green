@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+
+<!-- Content area -->
+<div class="content">
+    
+    <button id="evaluate-btn" class="btn btn-primary">Run ESG Compliance Evaluation</button>
+<div id="evaluation-result" class="mt-3"></div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$('#evaluate-btn').on('click', function() {
+  $('#evaluate-btn').prop('disabled', true).text('Analyzing...');
+  $('#evaluation-result').html(`
+    <div>
+      <p><strong>Running ESG Compliance Evaluation, please wait....</strong></p>
+      <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated"
+             role="progressbar"
+             style="width: 100%"></div>
+      </div>
+    </div>
+  `);
+});
+</script>
+</div>
+<!-- /column selectors -->
+
+
+{% endblock %}

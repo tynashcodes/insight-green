@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+
+<!-- Content area -->
+<div class="content">
+<div id="evaluation-result" class="mt-3"></div>
+<br>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card">
+        <div class="card-header d-sm-flex align-items-sm-center py-sm-0">
+            <h5 class="py-sm-2 my-sm-1">Scoring History Summary</h5>
+        </div>
+
+        <table class="table datatable-button-html5-columns">
+            <thead>
+                <tr>
+                    <th>Company Name</th>
+                    <th>Standard Name</th>
+                    <th>Scored Points</th>
+                    <th>Total Points</th>
+                    <th>Aggregate Score</th>
+                    <th>Evaluated On</th>
+                    <th>Manage Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for summary in summaries %}
+                <tr>
+                    <td>{{ summary.evaluation.company }}</td>
+                    <td>{{ summary.evaluation.standard.standard_code }}</td>
+                    <td>{{ summary.total_score }}</td>
+                    <td>{{ summary.total_possible }}</td>
+                    <td>
+                        {% if summary.compliance_percentage >= 50 and summary.compliance_percentage <= 65 %}
+                        <span class="badge bg-warning">{{ summary.compliance_percentage }}%</span>
+                        {% elif summary.compliance_percentage < 50 %}
+                        <span class="badge bg-danger">{{ summary.compliance_percentage }}%</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ summary.evaluation.created_at }}</td>
+                    <td>
+                        <div class="dropdown">
+                            <a href="javascript:void()" class="text-body" data-bs-toggle="dropdown">
+                                <i class="ph-list"></i>
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="manageLocationDropdown">
+                                <a href="javascript:void(0);" class="dropdown-item">
+                                    <i class="ph-play-circle me-2 text-primary"></i> Run ESG Compliance Evaluation
+                                </a>
+
+                                <a href="" class="dropdown-item" target="_blank">
+                                    <i class="ph-book-open me-2 text-pink"></i> Findings Per Standard
+                                </a>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- /column selectors -->
+
+{% endblock %}
