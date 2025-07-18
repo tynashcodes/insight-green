@@ -6469,7 +6469,7 @@ fieldset:disabled .btn {
 }
 .tooltip {
   --tooltip-zindex: 1080;
-  --tooltip-max-width: 200px;
+  --tooltip-max-width: 400px;
   --tooltip-padding-x: calc(var(--spacer) * 0.6);
   --tooltip-padding-y: calc(var(--spacer) * 0.4);
   --tooltip-font-size: var(--body-font-size);

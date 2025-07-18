@@ -621,3 +621,15 @@ def report_batch_list(request):
     report_batches = ESGReportBatch.objects.prefetch_related('reports').all()
 
     return render(request, 'compliance/report_batch_list.html', {'report_batches': report_batches})
+
+def scoring_history_detail(request, evaluation_id):
+    """
+    Render detailed scoring history for a specific evaluation.
+    """
+    evaluation = get_object_or_404(Evaluation, id=evaluation_id)
+    scores = ESGComplianceScore.objects.filter(evaluation=evaluation).select_related('page', 'compliance_item')
+    
+    return render(request, 'compliance/scoring_history_detail.html', {
+        'evaluation': evaluation,
+        'scores': scores
+    })
