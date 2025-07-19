@@ -340,20 +340,24 @@ def upload_companies(request):
 
 
 
-from django.shortcuts import render, redirect
-from .models import ESGReportBatch
+from django.contrib import messages
+from django.shortcuts import render
 from .forms import ESGReportBatchForm
 
 def create_esg_report_batch(request):
     if request.method == 'POST':
         form = ESGReportBatchForm(request.POST)
         if form.is_valid():
-                form.save()
-                # return redirect('esg_report_batch_success')  # Redirect to a success page
+            form.save()
+            messages.success(request, "ESG Report Batch created successfully!")
+        else:
+            # Form is invalid, display error message
+            messages.error(request, "There was an error creating the batch. Please check the form and try again.")
     else:
         form = ESGReportBatchForm()
     
     return render(request, 'compliance/create_esg_report_batch.html', {'form': form})
+
 
     
 
@@ -621,3 +625,26 @@ def report_batch_list(request):
     report_batches = ESGReportBatch.objects.prefetch_related('reports').all()
 
     return render(request, 'compliance/report_batch_list.html', {'report_batches': report_batches})
+
+
+
+
+
+
+def compliance_standards_findings(request):
+    """
+    Render a list of compliance standards findings.
+    """
+    # findings = ESGComplianceFramework.objects.all().select_related('document')
+    return render(request, 'scoring/compliance_standards_findings.html')
+
+
+
+
+
+def compliance_standards_findings_overview(request):
+    """
+    Render an overview of compliance standards findings.
+    """
+    # findings = ESGComplianceFramework.objects.all().select_related('document')
+    return render(request, 'scoring/compliance_standards_findings_overview.html')

@@ -1,0 +1,347 @@
+{% extends "base.html" %}
+{% load static %}
+
+        {% block secondary_sidebar %}
+            <!-- Secondary sidebar -->
+            <div class="sidebar sidebar-secondary sidebar-expand-lg">
+
+                <!-- Expand button -->
+                <button type="button" class="btn btn-sidebar-expand sidebar-control sidebar-secondary-toggle h-100">
+                    <i class="ph-caret-right"></i>
+                </button>
+                <!-- /expand button -->
+
+                <!-- Sidebar content -->
+                <div class="sidebar-content">
+
+                    <!-- Header -->
+                    <div class="sidebar-section sidebar-section-body d-flex align-items-center">
+                        <h5 class="mb-0">ESG Standards</h5>
+                        <div class="ms-auto">
+                            <button type="button" class="btn btn-light border-transparent btn-icon rounded-pill btn-sm sidebar-control sidebar-secondary-toggle d-none d-lg-inline-flex">
+                                <i class="ph-arrows-left-right"></i>
+                            </button>
+
+                            <button type="button" class="btn btn-light border-transparent btn-icon rounded-pill btn-sm sidebar-mobile-secondary-toggle d-lg-none">
+                                <i class="ph-x"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /header -->
+
+
+                    <!-- Sub navigation -->
+                    <div class="sidebar-section">
+
+                        
+                        <div class="sidebar-section-header border-bottom">
+                            <span class="fw-semibold">Active Standards</span>
+                        </div>
+
+                        <ul class="nav nav-sidebar" data-nav-type="accordion">
+                            <li class="nav-item-header text-muted">Select Standard from below</li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link active">
+                                    <span class="bg-primary rounded-circle align-self-center p-1 me-2"></span>
+                                    IFRS S1 (General)
+                                    <span class="badge bg-danger rounded-pill ms-auto">32%</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <span class="bg-success rounded-circle align-self-center p-1 me-2"></span>
+                                    IFRS S2 (Climate)
+                                    <span class="badge bg-success rounded-pill ms-auto">80%</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <span class="bg-indigo rounded-pill align-self-center p-1 me-2"></span>
+                                    TCFD
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <span class="bg-pink rounded-circle align-self-center p-1 me-2"></span>
+                                    GRI
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <span class="bg-success rounded-circle align-self-center p-1 me-2"></span>
+                                    SASB
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <span class="bg-warning rounded-circle align-self-center p-1 me-2"></span>
+                                    EU Taxonomy
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /sub navigation -->
+                </div>
+                <!-- /sidebar content -->
+
+            </div>
+            <!-- /secondary sidebar -->
+        {% endblock secondary_sidebar %}
+
+
+
+
+                {% block header %}
+                    <!-- Page header -->
+                    <div class="page-header page-header-light shadow">
+                        <div class="page-header-content d-lg-flex">
+                            <div class="d-flex">
+                                <h4 class="page-title mb-0">
+                                    ESG Evaluation - <span class="fw-normal">Detailed Findings per Standard</span>
+                                </h4>
+
+                                <a href="#page_header" class="btn btn-light align-self-center collapsed d-lg-none border-transparent rounded-pill p-0 ms-auto" data-bs-toggle="collapse">
+                                    <i class="ph-caret-down collapsible-indicator ph-sm m-1"></i>
+                                </a>
+                            </div>
+
+                            <div class="collapse d-lg-block my-lg-auto ms-lg-auto" id="page_header">
+                                <div class="d-sm-flex align-items-center mb-3 mb-lg-0 ms-lg-3">
+                                    <div class="dropdown w-100 w-sm-auto">
+                                        <a href="#" class="d-flex align-items-center text-body lh-1 py-sm-2" data-bs-toggle="dropdown" data-bs-display="static">
+                                            <img src="../../../assets/images/brands/tesla.svg" class="w-32px h-32px me-2" alt="">
+                                            <div class="me-auto me-lg-1">
+                                                <div class="fs-sm text-muted mb-1">Customer</div>
+                                                <div class="fw-semibold">Absa Group</div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="page-header-content d-lg-flex border-top">
+                            <div class="d-flex">
+                                <div class="breadcrumb py-2">
+                                    <a href="index.html" class="breadcrumb-item"><i class="ph-house"></i></a>
+                                    <a href="#" class="breadcrumb-item">Compliance Score</a>
+                                    <span class="breadcrumb-item active">Framework Evaluation</span>
+                                </div>
+
+                                <a href="#breadcrumb_elements" class="btn btn-light align-self-center collapsed d-lg-none border-transparent rounded-pill p-0 ms-auto" data-bs-toggle="collapse">
+                                    <i class="ph-caret-down collapsible-indicator ph-sm m-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /page header -->
+                {% endblock %}
+
+
+                {% block content %}
+                    <!-- Content area -->
+                    <div class="content">
+
+
+                        <!-- Multiple lines -->
+                        <div class="card">
+                            <div class="card-header d-flex">
+                                <h5 class="mb-0">IFRS S1 (General) Climate Disclosure - Detailed Findings</h5>
+
+                                <div class="ms-auto">
+                                    <span class="badge bg-danger">Overall: 32%</span>
+                                </div>
+                            </div>
+
+
+
+                            <!-- Table -->
+                            <div class="table-responsive">
+                                <table class="table table-inbox">
+                                    <tbody>
+
+                                        <tr class="unread">
+                                            <td class="table-inbox-checkbox">
+                                                <i class="ph-check-circle text-success me-2"></i>
+                                            </td>
+                                            <td class="table-inbox-image">
+                                                <div class="bg-warning text-white lh-1 rounded-pill p-1">
+                                                    <span class="letter-icon fs-sm"></span>
+                                                </div>
+                                            </td>
+                                            <td class="table-inbox-name">
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#modal_xlarge">
+                                                    <div class="letter-icon-title text-body">Climate Governance</div>
+                                                </a>
+                                            </td>
+                                            <td class="text-truncate">
+                                                <span class="text-muted fw-normal">The Board's Risk Committee meets quarterly to review climate-related risks, with direct
+reporting from the Chief Sustainability Officer...</span>
+                                            </td>
+                                            <td class="table-inbox-time">
+                                                <span class="badge bg-success align-top me-2">86%</span> 
+                                            </td>
+                                        </tr>
+
+                                        <tr class="unread">
+                                            <td class="table-inbox-checkbox">
+                                                <i class="ph-warning text-warning me-2"></i>
+                                            </td>
+                                            <td class="table-inbox-image">
+                                                <div class="bg-primary text-white lh-1 rounded-pill p-1">
+                                                    <span class="letter-icon fs-sm"></span>
+                                                </div>
+                                            </td>
+                                            <td class="table-inbox-name">
+                                                <a href="mail_read.html">
+                                                    <div class="letter-icon-title text-body">Climate Strategy</div>
+                                                </a>
+                                            </td>
+                                            <td class="text-truncate">
+                                                <span class="text-muted fw-normal">Our strategy considers climate transition risks in lending practices...</span>
+                                            </td>
+                                            <td class="table-inbox-time">
+                                                <span class="badge bg-danger align-top me-2">2%</span> 
+                                            </td>
+                                        </tr>
+
+                                        <tr class="unread">
+                                            <td class="table-inbox-checkbox">
+                                                <i class="ph-x-circle text-danger me-2"></i>
+                                            </td>
+                                            <td class="table-inbox-image">
+                                                <div class="bg-pink text-white lh-1 rounded-pill p-1">
+                                                    <span class="letter-icon fs-sm"></span>
+                                                </div>
+                                            </td>
+                                            <td class="table-inbox-name">
+                                                <a href="mail_read.html">
+                                                    <div class="letter-icon-title text-body">Risk Management</div>
+                                                </a>
+                                            </td>
+                                            <td class="text-truncate">
+                                                <span class="text-muted fw-normal">Our strategy considers climate transition risks in lending practices...</span>
+                                            </td>
+                                            <td class="table-inbox-time">
+                                                <span class="badge bg-warning align-top me-2">46%</span> 
+                                            </td>
+                                        </tr>
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /table -->
+
+                        </div>
+                        <!-- /multiple lines -->
+
+                    </div>
+                    <!-- /content area -->
+
+
+
+
+
+                    
+
+
+    <!-- Scrollable modal -->
+	<div id="modal_xlarge" class="modal fade" data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1">
+		<div class="modal-dialog modal-dialog-scrollable modal-xl">
+			<div class="modal-content">
+				<div class="modal-header bg-success text-white border-0">
+					<h5 class="modal-title"><i class="ph-check-circle me-2"></i>Climate Governance (86%)</h5>
+					<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+				</div>
+
+				<div class="modal-body">
+                    <div class="card-body">
+							<p class="mb-2">You can set one of the accordion items to be expanded by default. To render an accordion that’s expanded, add the <code>.open</code> class on the <code>.accordion</code>. For a consistent visual appearance and correct class name switching, you also need to remove <code>.collapsed</code> class from the active <code>.accordion-button</code> element. Note that only 1 accordion item can be expanded.</p>
+                            <hr>
+                            <div class="list-group list-group-flush">
+							<div class="list-group-item d-flex flex-column flex-sm-row align-items-start py-1">
+
+								<div class="flex-fill border-start border-3 border-danger ps-3">
+									<h6 class="mb-0">
+										<a><i class="ph-warning text-danger me-2"></i>Interaction UX/UI Industrial Designer</a>
+									</h6>
+
+									<ul class="list-inline list-inline-bullet text-muted mb-2">
+										<li class="list-inline-item"><a href="#" class="text-body">Assessment</a></li>
+										<li class="list-inline-item text-danger">Not Met</li>
+									</ul>
+
+									<p>Extended kindness trifling remember he confined outlived if. Assistance sentiments yet unpleasing say. Open they an busy they my such high. An active dinner wishes at unable hardly no talked on. Immediate him her resolving his favourite. Wished denote abroad at branch at. Mind what no by kept.</p>
+
+                                    <ul class="list-inline list-inline-bullet mb-0">
+									    <li class="list-inline-item fw-semibold"><a href="#collapse-link1" class="text-danger" data-bs-toggle="collapse">Click to view Recommendations</a></li>
+									    <li class="list-inline-item fw-semibold"><a href="#collapse-link2" data-bs-toggle="collapse">Click to view Justification</a></li>
+									    <li class="list-inline-item fw-semibold"><a href="#collapse-link3" data-bs-toggle="collapse">Click to submit feedback</a></li>
+								    </ul>
+
+                                    <div class="collapse" id="collapse-link1">
+									    <div class="mb-3">
+                                            <hr>
+                                            <h6>Recommendations</h6>
+										    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch.
+									    </div>
+								    </div>
+                                    <div class="collapse" id="collapse-link2">
+									    <div class="mb-3">
+                                            <hr>
+                                            <h6>Justification</h6>
+										    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch.
+									    </div>
+								    </div>
+                                    <div class="collapse" id="collapse-link3">
+									    <div class="mb-3">
+                                            <hr>
+                                            <h6>Feedback</h6>
+										    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch.
+									    </div>
+								    </div>
+								</div>
+
+								<div class="flex-shrink-0 ms-sm-3 mt-2 mt-sm-0">
+									<span class="badge bg-danger">0</span>
+								</div>
+							</div>
+
+							<div class="list-group-item d-flex flex-column flex-sm-row align-items-start py-3">
+
+								<div class="flex-fill border-start border-3 border-success ps-3">
+									<h6 class="mb-0">
+										<a><i class="ph-check-circle text-success me-2"></i>Front-End Designer / Developer</a>
+									</h6>
+
+									<ul class="list-inline list-inline-bullet text-muted mb-2">
+										<li class="list-inline-item"><a href="#" class="text-body">Assessment</a></li>
+										<li class="list-inline-item">Met</li>
+									</ul>
+
+									Quick six blind smart out burst. Perfectly on furniture dejection determine my depending an to. Add short water court fat. Her bachelor honoured perceive securing but desirous ham required. Questions deficient acuteness to engrossed as. Entirely led ten humoured greatest and yourself besides country.
+								</div>
+
+								<div class="flex-shrink-0 ms-sm-3 mt-2 mt-sm-0">
+									<span class="badge bg-success">1</span>
+								</div>
+							</div>
+
+						</div>
+
+						</div>
+                </div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-success" data-bs-dismiss="modal">Close Evaluation</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /scrollable modal -->
+
+
+
+
+                {% endblock %}

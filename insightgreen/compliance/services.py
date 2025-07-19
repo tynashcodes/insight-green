@@ -59,7 +59,7 @@ from openai import OpenAI
 def evaluate_report_against_framework(evaluation):
     """Evaluate report pages against ESG framework for a specific evaluation"""
 
-    client = OpenAI(api_key="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")
+    client = OpenAI(api_key="your_api_key_here")
     model = "gpt-4o-mini"
 
     scores = []

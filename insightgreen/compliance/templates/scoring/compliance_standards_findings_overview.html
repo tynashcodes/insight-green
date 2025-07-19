@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+
+
+                {% block header %}
+                    <!-- Page header -->
+                    <div class="page-header page-header-light shadow">
+                        <div class="page-header-content d-lg-flex">
+                            <div class="d-flex">
+                                <h4 class="page-title mb-0">
+                                    ESG Evaluation - <span class="fw-normal">Overview</span>
+                                </h4>
+
+                                <a href="#page_header" class="btn btn-light align-self-center collapsed d-lg-none border-transparent rounded-pill p-0 ms-auto" data-bs-toggle="collapse">
+                                    <i class="ph-caret-down collapsible-indicator ph-sm m-1"></i>
+                                </a>
+                            </div>
+
+                            <div class="collapse d-lg-block my-lg-auto ms-lg-auto" id="page_header">
+                                <div class="d-sm-flex align-items-center mb-3 mb-lg-0 ms-lg-3">
+                                    <div class="dropdown w-100 w-sm-auto">
+                                        <a href="#" class="d-flex align-items-center text-body lh-1 py-sm-2" data-bs-toggle="dropdown" data-bs-display="static">
+                                            <img src="../../../assets/images/brands/tesla.svg" class="w-32px h-32px me-2" alt="">
+                                            <div class="me-auto me-lg-1">
+                                                <div class="fs-sm text-muted mb-1">Customer</div>
+                                                <div class="fw-semibold">Absa Group</div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="page-header-content d-lg-flex border-top">
+                            <div class="d-flex">
+                                <div class="breadcrumb py-2">
+                                    <a href="index.html" class="breadcrumb-item"><i class="ph-house"></i></a>
+                                    <a href="#" class="breadcrumb-item">Compliance Score</a>
+                                    <span class="breadcrumb-item active">Framework Evaluation</span>
+                                </div>
+
+                                <a href="#breadcrumb_elements" class="btn btn-light align-self-center collapsed d-lg-none border-transparent rounded-pill p-0 ms-auto" data-bs-toggle="collapse">
+                                    <i class="ph-caret-down collapsible-indicator ph-sm m-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /page header -->
+                {% endblock %}
+
+
+                {% block content %}
+
+				<!-- Content area -->
+				<div class="content">
+
+
+
+					<!-- Radars -->
+<div class="row">
+    <div class="col-xl-5 d-flex flex-column">
+
+        <!-- Filled radar areas -->
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="chart-container">
+                    <div class="chart has-fixed-height" id="radar_filled"></div>
+                </div>
+            </div>
+        </div>
+        <!-- /filled radar areas -->
+
+        <!-- Assessment Summary -->
+        <div class="card">
+            <div class="card-body">
+                <div class="mb-4">
+                    <h6>Assessment Summary</h6>
+                    <p>This bank's ESG reporting shows strengths in GRI
+compliance but has signicant gaps in EU Taxonomy
+alignment and SFDR disclosures. Targeted
+improvements could raise the overall score from 77.6
+to >85.</p>
+                </div>
+            </div>
+        </div>
+        <!-- /Assessment Summary -->
+
+    </div>
+
+    <div class="col-xl-7">
+        <!-- All the IFRS S2 Cards go here -->
+        <div class="card border-start border-start-width-3 border-start-success rounded-0">
+            <div class="card-header d-flex align-items-center">
+                <h6 class="mb-0">IFRS S2 (Climate-related Disclosures)</h6>
+                <div class="ms-auto">
+                    <span class="badge bg-success rounded-pill">80.0%</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <p><i class="ph-warning-circle text-success me-1"></i> <strong>Gap:</strong> Scenario analysis was omitted, missing climate stress tests referenced in TCFD</p>
+                <p><i class="ph-lightbulb text-success me-1"></i> <strong>Recommendation:</strong> Incorporate climate scenario analysis consistent with TCFD recommendations (2°C or lower scenario)</p>
+                <p><i class="ph-lightbulb text-success me-1"></i> <strong>Recommendation:</strong> Set measurable climate risk targets and disclose progress against these targets</p>
+            </div>
+        </div>
+
+
+
+		<div class="card border-start border-start-width-3 border-start-success rounded-0">
+            <div class="card-header d-flex align-items-center">
+                <h6 class="mb-0">IFRS S2 (Climate-related Disclosures)</h6>
+                <div class="ms-auto">
+                    <span class="badge bg-success rounded-pill">80.0%</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <p><i class="ph-warning-circle text-success me-1"></i> <strong>Gap:</strong> Scenario analysis was omitted, missing climate stress tests referenced in TCFD</p>
+                <p><i class="ph-lightbulb text-success me-1"></i> <strong>Recommendation:</strong> Incorporate climate scenario analysis consistent with TCFD recommendations (2°C or lower scenario)</p>
+                <p><i class="ph-lightbulb text-success me-1"></i> <strong>Recommendation:</strong> Set measurable climate risk targets and disclose progress against these targets</p>
+            </div>
+        </div>
+
+
+		<div class="card border-start border-start-width-3 border-start-success rounded-0">
+            <div class="card-header d-flex align-items-center">
+                <h6 class="mb-0">IFRS S2 (Climate-related Disclosures)</h6>
+                <div class="ms-auto">
+                    <span class="badge bg-success rounded-pill">80.0%</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <p><i class="ph-warning-circle text-success me-1"></i> <strong>Gap:</strong> Scenario analysis was omitted, missing climate stress tests referenced in TCFD</p>
+                <p><i class="ph-lightbulb text-success me-1"></i> <strong>Recommendation:</strong> Incorporate climate scenario analysis consistent with TCFD recommendations (2°C or lower scenario)</p>
+                <p><i class="ph-lightbulb text-success me-1"></i> <strong>Recommendation:</strong> Set measurable climate risk targets and disclose progress against these targets</p>
+            </div>
+        </div>
+
+
+
+		<div class="card border-start border-start-width-3 border-start-success rounded-0">
+            <div class="card-header d-flex align-items-center">
+                <h6 class="mb-0">IFRS S2 (Climate-related Disclosures)</h6>
+                <div class="ms-auto">
+                    <span class="badge bg-success rounded-pill">80.0%</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <p><i class="ph-warning-circle text-success me-1"></i> <strong>Gap:</strong> Scenario analysis was omitted, missing climate stress tests referenced in TCFD</p>
+                <p><i class="ph-lightbulb text-success me-1"></i> <strong>Recommendation:</strong> Incorporate climate scenario analysis consistent with TCFD recommendations (2°C or lower scenario)</p>
+                <p><i class="ph-lightbulb text-success me-1"></i> <strong>Recommendation:</strong> Set measurable climate risk targets and disclose progress against these targets</p>
+            </div>
+        </div>
+
+
+		<div class="card border-start border-start-width-3 border-start-success rounded-0">
+            <div class="card-header d-flex align-items-center">
+                <h6 class="mb-0">IFRS S2 (Climate-related Disclosures)</h6>
+                <div class="ms-auto">
+                    <span class="badge bg-success rounded-pill">80.0%</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <p><i class="ph-warning-circle text-success me-1"></i> <strong>Gap:</strong> Scenario analysis was omitted, missing climate stress tests referenced in TCFD</p>
+                <p><i class="ph-lightbulb text-success me-1"></i> <strong>Recommendation:</strong> Incorporate climate scenario analysis consistent with TCFD recommendations (2°C or lower scenario)</p>
+                <p><i class="ph-lightbulb text-success me-1"></i> <strong>Recommendation:</strong> Set measurable climate risk targets and disclose progress against these targets</p>
+            </div>
+        </div>
+
+
+		<div class="card border-start border-start-width-3 border-start-success rounded-0">
+            <div class="card-header d-flex align-items-center">
+                <h6 class="mb-0">IFRS S2 (Climate-related Disclosures)</h6>
+                <div class="ms-auto">
+                    <span class="badge bg-success rounded-pill">80.0%</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <p><i class="ph-warning-circle text-success me-1"></i> <strong>Gap:</strong> Scenario analysis was omitted, missing climate stress tests referenced in TCFD</p>
+                <p><i class="ph-lightbulb text-success me-1"></i> <strong>Recommendation:</strong> Incorporate climate scenario analysis consistent with TCFD recommendations (2°C or lower scenario)</p>
+                <p><i class="ph-lightbulb text-success me-1"></i> <strong>Recommendation:</strong> Set measurable climate risk targets and disclose progress against these targets</p>
+            </div>
+        </div>
+
+
+		<div class="card border-start border-start-width-3 border-start-success rounded-0">
+            <div class="card-header d-flex align-items-center">
+                <h6 class="mb-0">IFRS S2 (Climate-related Disclosures)</h6>
+                <div class="ms-auto">
+                    <span class="badge bg-success rounded-pill">80.0%</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <p><i class="ph-warning-circle text-success me-1"></i> <strong>Gap:</strong> Scenario analysis was omitted, missing climate stress tests referenced in TCFD</p>
+                <p><i class="ph-lightbulb text-success me-1"></i> <strong>Recommendation:</strong> Incorporate climate scenario analysis consistent with TCFD recommendations (2°C or lower scenario)</p>
+                <p><i class="ph-lightbulb text-success me-1"></i> <strong>Recommendation:</strong> Set measurable climate risk targets and disclose progress against these targets</p>
+            </div>
+        </div>
+
+        <!-- Repeat more IFRS S2 cards as needed -->
+    </div>
+</div>
+<!-- /Radars -->
+
+
+
+				</div>
+				<!-- /content area -->
+
+                {% endblock %}

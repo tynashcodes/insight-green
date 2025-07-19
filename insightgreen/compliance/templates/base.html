@@ -58,6 +58,45 @@
 	<script src="{% static 'js/wizards/form_wizard.js' %}"></script>
 	<script src="{% static 'js/wizards/components_modals.js' %}"></script>
 
+
+
+
+
+
+
+
+
+	<!-- Theme JS files -->
+	<script src="{% static 'js/vendor/visualization/echarts/echarts.min.js' %}"></script>
+
+	<script src="{% static 'js/app.js' %}"></script>
+	<script src="{% static 'js/assets/charts/echarts/radar/radar_basic.js' %}"></script>
+	<script src="{% static 'js/assets/charts/echarts/radar/radar_filled.js' %}"></script>
+	<script src="{% static 'js/assets/charts/echarts/gauge/gauge_basic.js' %}"></script>
+	<script src="{% static 'js/assets/charts/echarts/gauge/gauge_custom.js' %}"></script>
+	<script src="{% static 'js/assets/charts/echarts/candlesticks/candlestick_basic.js' %}"></script>
+	<script src="{% static 'js/assets/charts/echarts/candlesticks/candlestick_line.js' %}"></script>
+	<script src="{% static 'js/assets/charts/echarts/candlesticks/candlestick_scatter.js' %}"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	<!-- Custom script to show current year -->
 	<script>
 		const currentYear = new Date().getFullYear();
@@ -82,6 +121,10 @@
 		<!-- Main sidebar -->
 		{% include 'includes/sidenav.html' %}
 		<!-- /main sidebar -->
+
+		<!-- Secondary Sidebar -->
+		{% block secondary_sidebar %}{% endblock secondary_sidebar %}
+		<!-- /secondary sidebar -->
 
 		<!-- Main content -->
 		<div class="content-wrapper">

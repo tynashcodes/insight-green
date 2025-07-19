@@ -29,4 +29,8 @@ urlpatterns = [
     # Extracted report pages overview
     path('framework/extracted/', views.extracted_framework_list, name='extracted_framework_list'),
     path('compliance/standards/', views.compliance_standards, name='compliance_standards'),
+    
+
+    path('compliance/standards/findings/', views.compliance_standards_findings, name='compliance_standards_findings'),
+    path('compliance/standards/findings/overview/', views.compliance_standards_findings_overview, name='compliance_standards_findings_overview'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
