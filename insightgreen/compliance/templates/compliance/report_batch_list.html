@@ -28,6 +28,7 @@
                                 <th>Is Confidential</th>
                                 <th>Created At</th>
                                 <th>Report File</th>
+                                <th class="text-center">Manage</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -54,6 +55,22 @@
                                                 No File
                                             {% endif %}
                                         </td>
+                                        <td class="text-center">
+                                                <div class="d-inline-flex">
+                                                    <div class="dropdown">
+                                                        <a href="javascript:void()" class="text-body" data-bs-toggle="dropdown">
+                                                            <i class="ph-list"></i>
+                                                        </a>
+
+                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                            <a href="{% url 'extract_report_by_pages' report.id %}" class="dropdown-item">
+                                                                <i class="ph-database me-2 text-success"></i>
+                                                                Extract & Save
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
                                     </tr>
                                 {% endfor %}
                             {% empty %}

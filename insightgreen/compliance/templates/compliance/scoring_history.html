@@ -54,13 +54,9 @@
                             <a href="javascript:void()" class="text-body" data-bs-toggle="dropdown">
                                 <i class="ph-list"></i>
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="manageLocationDropdown">
-                                <a href="javascript:void(0);" class="dropdown-item">
-                                    <i class="ph-play-circle me-2 text-primary"></i> Run ESG Compliance Evaluation
-                                </a>
-
-                                <a href="" class="dropdown-item" target="_blank">
-                                    <i class="ph-book-open me-2 text-pink"></i> Findings Per Standard
+                            <ul class="dropdown-menu">
+                                <a href="{% url "scoring_history_detail" summary.evaluation.id %}" class="dropdown-item">
+                                    <i class="ph-dice-three me-2 text-primary"></i> Detailed Scoring History
                                 </a>
                             </ul>
                         </div>

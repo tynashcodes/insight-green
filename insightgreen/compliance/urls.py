@@ -29,8 +29,12 @@ urlpatterns = [
     # Extracted report pages overview
     path('framework/extracted/', views.extracted_framework_list, name='extracted_framework_list'),
     path('compliance/standards/', views.compliance_standards, name='compliance_standards'),
+<<<<<<< HEAD
     
 
     path('compliance/standards/findings/', views.compliance_standards_findings, name='compliance_standards_findings'),
     path('compliance/standards/findings/overview/', views.compliance_standards_findings_overview, name='compliance_standards_findings_overview'),
+=======
+    path('scoring-history/<int:evaluation_id>/details/', views.scoring_history_detail, name='scoring_history_detail'),
+>>>>>>> 5adad419eff4f3cec3ea817d64ebdc2c4e3e21d4
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -626,6 +626,7 @@ def report_batch_list(request):
 
     return render(request, 'compliance/report_batch_list.html', {'report_batches': report_batches})
 
+<<<<<<< HEAD
 
 
 
@@ -648,3 +649,16 @@ def compliance_standards_findings_overview(request):
     """
     # findings = ESGComplianceFramework.objects.all().select_related('document')
     return render(request, 'scoring/compliance_standards_findings_overview.html')
+=======
+def scoring_history_detail(request, evaluation_id):
+    """
+    Render detailed scoring history for a specific evaluation.
+    """
+    evaluation = get_object_or_404(Evaluation, id=evaluation_id)
+    scores = ESGComplianceScore.objects.filter(evaluation=evaluation).select_related('page', 'compliance_item')
+    
+    return render(request, 'compliance/scoring_history_detail.html', {
+        'evaluation': evaluation,
+        'scores': scores
+    })
+>>>>>>> 5adad419eff4f3cec3ea817d64ebdc2c4e3e21d4
